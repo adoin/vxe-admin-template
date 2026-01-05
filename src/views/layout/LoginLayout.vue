@@ -45,7 +45,7 @@ onUnmounted(() => {
         <RouterView class="bg-glass rounded-lg p-4" />
       </div>
     </vxe-layout-body>
-    <day-night v-model="isNight" class-name="absolute right-0 top-0 scale-1/3" />
+    <day-night v-model="isNight" class-name="absolute right-10 top-6" :width="100" />
   </vxe-layout-container>
 </template>
 

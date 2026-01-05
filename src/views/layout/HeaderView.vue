@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { VxeGlobalI18nLocale, VxePulldownEvents } from 'vxe-pc-ui'
+import DayNight from 'day-or-night'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDayNight } from '@/hooks/useDayNight'
@@ -114,19 +115,9 @@ const userOptionClickEvent: VxePulldownEvents.OptionClick = ({ option }) => {
       <span class="cursor-pointer ml-6">
         <vxe-link href="/admin-template-v3/" status="primary" target="_blank">切换 v3.x 版本</vxe-link>
       </span>
-
       <span class="cursor-pointer ml-6">
-        <vxe-link href="https://github.com/x-extends/vxe-admin-template" icon="vxe-icon-github-fill" target="_blank"
-          >Github</vxe-link
-        >
-        <vxe-link href="https://gitee.com/x-extends/vxe-admin-template" target="_blank">
-          <vxe-icon name="gitee-fill" status="error"></vxe-icon>
-          <span>Gitee</span>
-        </vxe-link>
+        <day-night v-model="isNight" :width="50" />
       </span>
-
-      <day-night v-model="isNight" class-name="absolute left-0 top-0" />
-
       <span class="cursor-pointer ml-6">
         <vxe-color-picker
           v-model="currPrimaryColor"
