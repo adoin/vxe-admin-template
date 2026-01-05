@@ -1,5 +1,5 @@
 import type { RouteLocationNormalizedLoadedGeneric } from 'vue-router'
-import type { VxeComponentSizeType, VxeGlobalI18nLocale, VxeGlobalThemeName } from 'vxe-pc-ui';
+import type { VxeComponentSizeType, VxeGlobalI18nLocale, VxeGlobalThemeName } from 'vxe-pc-ui'
 import { defineStore } from 'pinia'
 import tinycolor2 from 'tinycolor2'
 import { VxeUI } from 'vxe-pc-ui'
@@ -59,7 +59,11 @@ export const useAppStore = defineStore('app', {
       pageKey: 0
     }
   },
-  getters: {},
+  getters: {
+    isNight(state) {
+      return state.theme === 'dark'
+    }
+  },
   actions: {
     /**
      * 设置主题

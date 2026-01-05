@@ -53,13 +53,13 @@ const formEvents: VxeFormListeners<FormDataVO> = {
 </script>
 
 <template>
-  <div>
+  <div class="bg-glass rounded-lg p-4">
     <div class="login-title">
       <img src="@/assets/logo.png" />
       <span>Vxe Admin</span>
     </div>
-    <div class="login-desc">一个简洁高效、极致流畅的管理系统模板</div>
-    <vxe-form v-bind="formOptions" v-on="formEvents">
+    <div class="login-desc">一个简洁的管理系统模板</div>
+    <vxe-form v-bind="formOptions" :style="{ '--vxe-ui-layout-background-color': 'transparent' }" v-on="formEvents">
       <template #pwdAction>
         <vxe-row>
           <vxe-col span="12">
@@ -77,8 +77,7 @@ const formEvents: VxeFormListeners<FormDataVO> = {
         <vxe-row>
           <vxe-col span="12"></vxe-col>
           <vxe-col align="right" span="12">
-            <span class="ml-4">没有账号？</span>
-            <vxe-link :router-link="{ name: 'RegisterView' }" status="primary">点击注册</vxe-link>
+            <vxe-link :router-link="{ name: 'RegisterView' }" status="primary">没有账号？点我注册</vxe-link>
           </vxe-col>
         </vxe-row>
       </template>

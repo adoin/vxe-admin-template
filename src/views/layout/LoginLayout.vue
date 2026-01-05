@@ -1,12 +1,45 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import DayNight from 'day-or-night'
+import fog from 'vanta/dist/vanta.fog.min'
+import { onMounted, onUnmounted, ref } from 'vue'
+import { VxeLayoutContainer } from 'vxe-pc-ui'
+import { useDayNight } from '@/hooks/useDayNight'
+
+const { isNight } = useDayNight()
+const elBgLogin = ref<InstanceType<typeof VxeLayoutContainer>>()
+let vantaEntity: any
+const vantaSet = () => {
+  vantaEntity?.destroy()
+  vantaEntity = fog({
+    el: elBgLogin.value?.$el,
+    mouseControls: true,
+    touchControls: true,
+    gyroControls: false,
+    minHeight: 200.0,
+    minWidth: 200.0,
+    blurFactor: 0.48,
+    highlightColor: `#1ebcff`,
+    midtoneColor: `#e36c4a`,
+    lowlightColor: `#30d486`,
+    baseColor: isNight.value ? `#212b4b` : `#ffebeb`
+  })
+}
+onMounted(() => {
+  vantaSet()
+})
+onUnmounted(() => {
+  vantaEntity?.destroy()
+})
+</script>
 
 <template>
-  <vxe-layout-container vertical>
+  <vxe-layout-container ref="elBgLogin" vertical>
     <vxe-layout-body padding>
       <div class="w-90 mx-auto mt-10vh">
         <RouterView />
       </div>
     </vxe-layout-body>
+    <day-night v-model="isNight" class-name="absolute right-0 top-0 scale-1/3" />
   </vxe-layout-container>
 </template>
 
