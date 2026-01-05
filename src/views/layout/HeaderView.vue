@@ -107,21 +107,21 @@ const userOptionClickEvent: VxePulldownEvents.OptionClick = ({ option }) => {
 </script>
 
 <template>
-  <div class="page-header">
-    <div class="header-left">
+  <div class="flex flex-row items-center h-50px px-4 border-b-1 border-[var(--page-layout-border-color)]">
+    <div class="grow">
       <vxe-button
-        class="collapseBtn"
+        class="text-18px"
         :icon="appStore.collapseAside ? 'vxe-icon-menu-unfold' : 'vxe-icon-menu-fold'"
         mode="text"
         @click="appStore.toggleCollapseAside()"
       ></vxe-button>
     </div>
-    <div v-if="userInfo" class="header-right">
-      <span class="right-item">
+    <div v-if="userInfo" class="flex flex-row shrink-0 items-center">
+      <span class="cursor-pointer ml-6">
         <vxe-link href="/admin-template-v3/" status="primary" target="_blank">切换 v3.x 版本</vxe-link>
       </span>
 
-      <span class="right-item">
+      <span class="cursor-pointer ml-6">
         <vxe-link href="https://github.com/x-extends/vxe-admin-template" icon="vxe-icon-github-fill" target="_blank"
           >Github</vxe-link
         >
@@ -131,10 +131,10 @@ const userOptionClickEvent: VxePulldownEvents.OptionClick = ({ option }) => {
         </vxe-link>
       </span>
 
-      <span class="right-item">
+      <span class="cursor-pointer ml-6">
         <vxe-switch
           v-model="currTheme"
-          class="right-item-comp"
+          class="align-middle"
           close-label="夜间"
           close-value="dark"
           open-label="白天"
@@ -144,7 +144,7 @@ const userOptionClickEvent: VxePulldownEvents.OptionClick = ({ option }) => {
         </vxe-switch>
       </span>
 
-      <span class="right-item">
+      <span class="cursor-pointer ml-6">
         <vxe-color-picker
           v-model="currPrimaryColor"
           class="switch-primary-color"
@@ -153,7 +153,7 @@ const userOptionClickEvent: VxePulldownEvents.OptionClick = ({ option }) => {
         ></vxe-color-picker>
       </span>
 
-      <span class="right-item">
+      <span class="cursor-pointer ml-6">
         <vxe-radio-group
           v-model="currCompSize"
           class="switch-size"
@@ -163,9 +163,9 @@ const userOptionClickEvent: VxePulldownEvents.OptionClick = ({ option }) => {
         ></vxe-radio-group>
       </span>
 
-      <span class="right-item">
+      <span class="cursor-pointer ml-6">
         <vxe-pulldown
-          class="right-item-comp"
+          class="align-middle"
           :options="langPullList"
           show-popup-shadow
           transfer
@@ -176,10 +176,10 @@ const userOptionClickEvent: VxePulldownEvents.OptionClick = ({ option }) => {
         </vxe-pulldown>
       </span>
 
-      <span v-if="userInfo.roleList && userInfo.roleList.length > 1" class="right-item">
-        <span class="right-item-title">角色：</span>
+      <span v-if="userInfo.roleList && userInfo.roleList.length > 1" class="cursor-pointer ml-6">
+        <span class="align-middle">角色：</span>
         <vxe-pulldown
-          class="right-item-comp"
+          class="align-middle"
           :options="userInfo.roleList"
           show-popup-shadow
           transfer
@@ -194,7 +194,7 @@ const userOptionClickEvent: VxePulldownEvents.OptionClick = ({ option }) => {
       </span>
 
       <vxe-pulldown
-        class="right-item"
+        class="cursor-pointer ml-6"
         :options="userPullList"
         show-popup-shadow
         transfer
@@ -202,64 +202,13 @@ const userOptionClickEvent: VxePulldownEvents.OptionClick = ({ option }) => {
         @option-click="userOptionClickEvent"
       >
         <template #default>
-          <div class="user-avatar">
+          <div class="inline-flex flex-row items-center cursor-pointer">
             <vxe-text>{{ userInfo.nickname || userInfo.name }}</vxe-text>
-            <img v-if="userInfo.pictureUrl" class="user-picture" :src="userInfo.pictureUrl" />
-            <img v-else class="user-picture" src="@/assets/default-picture.png" />
+            <img v-if="userInfo.pictureUrl" class="w-24px h-24px mx-2px" :src="userInfo.pictureUrl" />
+            <img v-else class="w-24px h-24px mx-2px" src="@/assets/default-picture.png" />
           </div>
         </template>
       </vxe-pulldown>
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.page-header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 50px;
-  padding: 0 16px;
-  border-bottom: 1px solid var(--page-layout-border-color);
-
-  .header-left {
-    flex-grow: 1;
-  }
-
-  .header-right {
-    display: flex;
-    flex-direction: row;
-    flex-shrink: 0;
-    align-items: center;
-  }
-
-  .right-item {
-    cursor: pointer;
-    margin-left: 24px;
-  }
-  .right-item-title {
-    vertical-align: middle;
-  }
-
-  .right-item-comp {
-    vertical-align: middle;
-  }
-
-  .user-avatar {
-    display: inline-flex;
-    flex-direction: row;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  .user-picture {
-    width: 24px;
-    height: 24px;
-    margin: 0 2px;
-  }
-
-  .collapseBtn {
-    font-size: 18px;
-  }
-}
-</style>

@@ -6,7 +6,7 @@ import UserPvChart from './components/UserPvChart.vue'
 </script>
 
 <template>
-  <PageView :background="false" class="home-page" :padding="false">
+  <PageView :background="false" class="overflow-x-hidden" :padding="false">
     <vxe-row :gutter="[16, 16]" wrap>
       <vxe-col span="24">
         <statistics-module />
@@ -23,9 +23,3 @@ import UserPvChart from './components/UserPvChart.vue'
     </vxe-row>
   </PageView>
 </template>
-
-<style lang="scss" scoped>
-.home-page {
-  overflow-x: hidden;
-}
-</style>

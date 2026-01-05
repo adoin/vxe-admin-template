@@ -78,13 +78,13 @@ const formEvents: VxeFormListeners<FormDataVO> = {
         <vxe-link status="primary">《用户协议》</vxe-link>
       </template>
       <template #submitAction>
-        <vxe-button status="primary" style="width: 100%" type="submit">点击注册</vxe-button>
+        <vxe-button class="w-full" status="primary" type="submit">点击注册</vxe-button>
       </template>
       <template #otherAction>
         <vxe-row>
           <vxe-col span="12"></vxe-col>
           <vxe-col align="right" span="12">
-            <span style="margin-left: 16px">已有账号？</span>
+            <span class="ml-4">已有账号？</span>
             <vxe-link :router-link="{ name: 'LoginView' }" status="primary">立即登录</vxe-link>
           </vxe-col>
         </vxe-row>

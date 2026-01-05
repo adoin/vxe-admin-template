@@ -39,24 +39,18 @@ updateSelectMenu()
 </script>
 
 <template>
-  <div class="aside-view">
-    <div class="aside-logo">
-      <img class="logo-img" src="@/assets/logo.png" />
-      <vxe-link v-if="!appStore.collapseAside" class="logo-title" href="/">Vxe 后台管理系统模板v4</vxe-link>
+  <div class="aside-view flex flex-col h-full overflow-hidden">
+    <div class="flex flex-row items-center shrink-0 px-4 py-2">
+      <img class="block w-30px h-30px" src="@/assets/logo.png" />
+      <vxe-link v-if="!appStore.collapseAside" class="pl-2 font-bold text-18px overflow-hidden text-ellipsis whitespace-nowrap" href="/">Vxe 后台管理系统模板v4</vxe-link>
     </div>
-    <div class="aside-menu">
+    <div class="grow overflow-y-auto overflow-x-hidden">
       <VxeMenu v-model="currRouteName" collapse-fixed :options="userStore.menuTreeList" />
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.aside-view {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-}
 .aside-view {
   ::-webkit-scrollbar {
     width: 8px;
@@ -97,31 +91,5 @@ updateSelectMenu()
       background-color: #a3a6ad;
     }
   }
-}
-
-.aside-logo {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex-shrink: 0;
-  padding: 8px 16px;
-  .logo-img {
-    display: block;
-    width: 30px;
-    height: 30px;
-  }
-  .logo-title {
-    padding-left: 8px;
-    font-weight: 700;
-    font-size: 18px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-}
-.aside-menu {
-  flex-grow: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 </style>

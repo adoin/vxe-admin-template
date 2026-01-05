@@ -101,8 +101,8 @@ const tabOptionClickEvent = ({ option }) => {
 </script>
 
 <template>
-  <div class="page-top">
-    <div class="page-nav">
+  <div class="flex flex-col shrink-0 leading-40px border-b-1 border-[var(--page-layout-border-color)]">
+    <div class="page-nav pt-6px pr-4">
       <vxe-tabs
         v-model="selectTab"
         :options="tabList"
@@ -127,10 +127,10 @@ const tabOptionClickEvent = ({ option }) => {
         </template>
       </vxe-tabs>
     </div>
-    <div class="page-breadcrumb">
-      <div class="page-breadcrumb-left">
-        <vxe-button class="back-btn" icon="vxe-icon-arrows-left" mode="text" @click="backEvent"></vxe-button>
-        <vxe-button class="refresh-btn" icon="vxe-icon-refresh" mode="text" @click="refreshEvent"></vxe-button>
+    <div class="flex flex-row">
+      <div class="grow">
+        <vxe-button class="text-16px align-middle ml-2" icon="vxe-icon-arrows-left" mode="text" @click="backEvent"></vxe-button>
+        <vxe-button class="text-16px align-middle mr-3" icon="vxe-icon-refresh" mode="text" @click="refreshEvent"></vxe-button>
         <vxe-breadcrumb :options="navList"></vxe-breadcrumb>
       </div>
     </div>
@@ -138,42 +138,11 @@ const tabOptionClickEvent = ({ option }) => {
 </template>
 
 <style lang="scss" scoped>
-.page-top {
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  line-height: 40px;
-  border-bottom: 1px solid var(--page-layout-border-color);
-  .back-btn,
-  .refresh-btn {
-    font-size: 16px;
-    vertical-align: middle;
-  }
-  .back-btn {
-    margin-left: 8px;
-  }
-  .refresh-btn {
-    margin-right: 12px;
-  }
-}
 .page-nav {
-  padding-top: 6px;
-  padding-right: 16px;
   ::v-deep(.vxe-tabs--round-card) {
     .vxe-tabs-header--item-wrapper {
       padding: 0 8px;
     }
-  }
-}
-.page-breadcrumb {
-  display: flex;
-  flex-direction: row;
-  .page-breadcrumb-left {
-    flex-grow: 1;
-  }
-  .page-breadcrumb-right {
-    flex-shrink: 0;
-    padding-right: 16px;
   }
 }
 </style>

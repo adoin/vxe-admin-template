@@ -6,15 +6,8 @@ const dateStr = ref(XEUtils.toDateString(new Date(), 'yyyy'))
 </script>
 
 <template>
-  <div class="page-footer">
+  <div class="text-center p-2 bg-[var(--page-layout-background-color)]">
     <span>版权所有 ©<vxe-link href="https://vxeui.com/" target="_blank">vxe</vxe-link> 2018-{{ dateStr }}</span>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.page-footer {
-  text-align: center;
-  padding: 8px;
-  background-color: var(--page-layout-background-color);
-}
-</style>

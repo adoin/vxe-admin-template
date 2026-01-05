@@ -14,24 +14,8 @@ defineProps({
 </script>
 
 <template>
-  <div class="page-view" :class="[{ 'is-pg': padding, 'is-bg': background }]">
+  <div class="relative h-full min-w-800px overflow-auto rounded-6px" :class="[{ 'p-4': padding, 'bg-[var(--page-layout-body-background-color)]': background }]">
     <slot></slot>
     <vxe-loading :model-value="loading" :text="loadingText"></vxe-loading>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.page-view {
-  position: relative;
-  height: 100%;
-  min-width: 800px;
-  overflow: auto;
-  border-radius: 6px;
-  &.is-pg {
-    padding: 16px;
-  }
-  &.is-bg {
-    background-color: var(--page-layout-body-background-color);
-  }
-}
-</style>

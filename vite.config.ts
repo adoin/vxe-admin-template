@@ -4,19 +4,24 @@ import process from 'node:process'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import externalGlobals from 'rollup-plugin-external-globals'
+import UnoCSS from 'unocss/vite'
 import { loadEnv } from 'vite'
 import { createHtmlPlugin } from 'vite-plugin-html'
+import vueDevTools from 'vite-plugin-vue-devtools'
 import zipPack from 'vite-plugin-zip-pack'
 import XEUtils from 'xe-utils'
 
 // https://vitejs.dev/config/
 export default ({ mode }: ConfigEnv): UserConfig => {
   const env = loadEnv(mode, process.cwd(), 'VITE_')
+  const LAUNCH_EDITOR = env.VITE_VUE_LAUNCH_EDITOR
   return {
     base: '/admin-template-v4/',
     plugins: [
       vue(),
       vueJsx(),
+      UnoCSS(),
+      vueDevTools({ launchEditor: LAUNCH_EDITOR }),
       createHtmlPlugin({
         inject: {
           data: {

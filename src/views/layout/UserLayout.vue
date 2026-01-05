@@ -10,7 +10,7 @@ const appStore = useAppStore()
 
 <template>
   <vxe-layout-container :size="appStore.componentsSize">
-    <vxe-layout-aside class="page-aside" :collapsed="appStore.collapseAside" :width="240">
+    <vxe-layout-aside class="py-2 border-r-1 border-[var(--page-layout-border-color)]" :collapsed="appStore.collapseAside" :width="240">
       <aside-view />
     </vxe-layout-aside>
     <vxe-layout-container vertical>
@@ -18,7 +18,7 @@ const appStore = useAppStore()
         <header-view />
         <top-view />
       </vxe-layout-header>
-      <vxe-layout-body :key="appStore.pageKey" class="page-body" show-backtop>
+      <vxe-layout-body :key="appStore.pageKey" class="px-4 pt-4 pb-0 bg-[var(--page-layout-background-color)]" show-backtop>
         <RouterView />
       </vxe-layout-body>
       <vxe-layout-footer>
@@ -27,15 +27,3 @@ const appStore = useAppStore()
     </vxe-layout-container>
   </vxe-layout-container>
 </template>
-
-<style lang="scss" scoped>
-.page-aside {
-  padding: 8px 0;
-  border-right: 1px solid var(--page-layout-border-color);
-}
-
-.page-body {
-  padding: 16px 16px 0 16px;
-  background-color: var(--page-layout-background-color);
-}
-</style>

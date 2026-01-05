@@ -71,13 +71,13 @@ const formEvents: VxeFormListeners<FormDataVO> = {
         </vxe-row>
       </template>
       <template #submitAction>
-        <vxe-button status="primary" style="width: 100%" type="submit">立即登录</vxe-button>
+        <vxe-button class="w-full" status="primary" type="submit">立即登录</vxe-button>
       </template>
       <template #otherAction>
         <vxe-row>
           <vxe-col span="12"></vxe-col>
           <vxe-col align="right" span="12">
-            <span style="margin-left: 16px">没有账号？</span>
+            <span class="ml-4">没有账号？</span>
             <vxe-link :router-link="{ name: 'RegisterView' }" status="primary">点击注册</vxe-link>
           </vxe-col>
         </vxe-row>
