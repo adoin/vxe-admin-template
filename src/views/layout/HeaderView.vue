@@ -2,6 +2,7 @@
 import type { VxeGlobalI18nLocale, VxePulldownEvents } from 'vxe-pc-ui'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useDayNight } from '@/hooks/useDayNight'
 import { useAppStore } from '@/store/app'
 import { useUserStore } from '@/store/user'
 
@@ -23,14 +24,7 @@ const langLabel = computed(() => {
 
 const userPullList = ref([{ label: '退出登录', value: 'logout' }])
 
-const currTheme = computed({
-  get() {
-    return appStore.theme
-  },
-  set(name) {
-    appStore.setTheme(name)
-  }
-})
+const { isNight } = useDayNight()
 
 const currPrimaryColor = computed({
   get() {
@@ -131,18 +125,7 @@ const userOptionClickEvent: VxePulldownEvents.OptionClick = ({ option }) => {
         </vxe-link>
       </span>
 
-      <span class="cursor-pointer ml-6">
-        <vxe-switch
-          v-model="currTheme"
-          class="align-middle"
-          close-label="夜间"
-          close-value="dark"
-          open-label="白天"
-          open-value="light"
-          size="mini"
-        >
-        </vxe-switch>
-      </span>
+      <day-night v-model="isNight" class-name="absolute left-0 top-0" />
 
       <span class="cursor-pointer ml-6">
         <vxe-color-picker
