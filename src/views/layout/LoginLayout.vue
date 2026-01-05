@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import DayNight from 'day-or-night'
 import fog from 'vanta/dist/vanta.fog.min'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { VxeLayoutContainer } from 'vxe-pc-ui'
 import { useDayNight } from '@/hooks/useDayNight'
 
@@ -27,6 +27,12 @@ const vantaSet = () => {
 onMounted(() => {
   vantaSet()
 })
+watch(
+  () => isNight.value,
+  () => {
+    vantaSet()
+  }
+)
 onUnmounted(() => {
   vantaEntity?.destroy()
 })
