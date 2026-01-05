@@ -53,13 +53,13 @@ const formEvents: VxeFormListeners<FormDataVO> = {
 </script>
 
 <template>
-  <div class="bg-glass rounded-lg p-4">
+  <div>
     <div class="login-title">
       <img src="@/assets/logo.png" />
       <span>Vxe Admin</span>
     </div>
     <div class="login-desc">一个简洁的管理系统模板</div>
-    <vxe-form v-bind="formOptions" :style="{ '--vxe-ui-layout-background-color': 'transparent' }" v-on="formEvents">
+    <vxe-form v-bind="formOptions" v-on="formEvents">
       <template #pwdAction>
         <vxe-row>
           <vxe-col span="12">

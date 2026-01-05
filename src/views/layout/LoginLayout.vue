@@ -39,10 +39,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <vxe-layout-container ref="elBgLogin" vertical>
+  <vxe-layout-container ref="elBgLogin" :style="{ '--vxe-ui-layout-background-color': 'transparent' }" vertical>
     <vxe-layout-body padding>
       <div class="w-90 mx-auto mt-10vh">
-        <RouterView />
+        <RouterView class="bg-glass rounded-lg p-4" />
       </div>
     </vxe-layout-body>
     <day-night v-model="isNight" class-name="absolute right-0 top-0 scale-1/3" />
