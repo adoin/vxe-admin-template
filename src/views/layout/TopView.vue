@@ -1,39 +1,8 @@
-<template>
-  <div class="page-top">
-    <div class="page-nav">
-      <vxe-tabs
-        v-model="selectTab"
-        type="round-card"
-        :options="tabList"
-        :show-body="false"
-        :show-close="tabList.length > 1"
-        @tab-click="tabClickEvent"
-        @tab-close="tabCloseEvent">
-        <template #tab-suffix>
-          <vxe-pulldown :options="tabOptions" trigger="click" show-popup-shadow transfer
-            @option-click="tabOptionClickEvent">
-            <template #default>
-              <vxe-button mode="text" icon="vxe-icon-ellipsis-v"></vxe-button>
-            </template>
-          </vxe-pulldown>
-        </template>
-      </vxe-tabs>
-    </div>
-    <div class="page-breadcrumb">
-      <div class="page-breadcrumb-left">
-        <vxe-button mode="text" icon="vxe-icon-arrows-left" class="back-btn" @click="backEvent"></vxe-button>
-        <vxe-button mode="text" icon="vxe-icon-refresh" class="refresh-btn" @click="refreshEvent"></vxe-button>
-        <vxe-breadcrumb :options="navList"></vxe-breadcrumb>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
-import XEUtils from 'xe-utils'
-import { ref, computed } from 'vue'
+import type { VxeTabsEvents } from 'vxe-pc-ui'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { VxeTabsEvents } from 'vxe-pc-ui'
+import XEUtils from 'xe-utils'
 import { useAppStore } from '@/store/app'
 import { useUserStore } from '@/store/user'
 import { routeToMenuName } from '@/utils'
@@ -45,7 +14,7 @@ const userStore = useUserStore()
 
 const navList = computed(() => {
   const routeName = routeToMenuName(route)
-  const rest = XEUtils.findTree(userStore.menuAllTreeList, item => item.name === routeName, { children: 'children' })
+  const rest = XEUtils.findTree(userStore.menuAllTreeList, (item) => item.name === routeName, { children: 'children' })
   if (rest) {
     const { nodes } = rest
     return nodes.map((item) => {
@@ -59,7 +28,7 @@ const navList = computed(() => {
 })
 
 const tabList = computed(() => {
-  return userStore.userTabs.map(item => {
+  return userStore.userTabs.map((item) => {
     const menuItem = userStore.menuNameMaps[item.name]
     return {
       title: menuItem ? menuItem.title : item.name,
@@ -76,10 +45,10 @@ const tabList = computed(() => {
 })
 
 const selectTab = computed({
-  get () {
+  get() {
     return userStore.activeUserTab
   },
-  set (value) {
+  set(value) {
     userStore.activeUserTab = value
   }
 })
@@ -100,7 +69,7 @@ const refreshEvent = () => {
 }
 
 const tabClickEvent: VxeTabsEvents.TabClick = ({ name }) => {
-  const item = tabList.value.find(item => item.name === name)
+  const item = tabList.value.find((item) => item.name === name)
   if (item) {
     if (item.path !== route.fullPath) {
       router.push(item.path)
@@ -130,6 +99,43 @@ const tabOptionClickEvent = ({ option }) => {
   }
 }
 </script>
+
+<template>
+  <div class="page-top">
+    <div class="page-nav">
+      <vxe-tabs
+        v-model="selectTab"
+        :options="tabList"
+        :show-body="false"
+        :show-close="tabList.length > 1"
+        type="round-card"
+        @tab-click="tabClickEvent"
+        @tab-close="tabCloseEvent"
+      >
+        <template #tab-suffix>
+          <vxe-pulldown
+            :options="tabOptions"
+            show-popup-shadow
+            transfer
+            trigger="click"
+            @option-click="tabOptionClickEvent"
+          >
+            <template #default>
+              <vxe-button icon="vxe-icon-ellipsis-v" mode="text"></vxe-button>
+            </template>
+          </vxe-pulldown>
+        </template>
+      </vxe-tabs>
+    </div>
+    <div class="page-breadcrumb">
+      <div class="page-breadcrumb-left">
+        <vxe-button class="back-btn" icon="vxe-icon-arrows-left" mode="text" @click="backEvent"></vxe-button>
+        <vxe-button class="refresh-btn" icon="vxe-icon-refresh" mode="text" @click="refreshEvent"></vxe-button>
+        <vxe-breadcrumb :options="navList"></vxe-breadcrumb>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .page-top {

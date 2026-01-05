@@ -1,4 +1,5 @@
-import axios, { AxiosResponse, AxiosRequestConfig, Axios } from 'axios'
+import type { Axios, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios from 'axios'
 import { VxeUI } from 'vxe-pc-ui'
 import { useUserStore } from '@/store/user'
 
@@ -19,13 +20,13 @@ interface CustomAxiosInstance extends Axios {
   <T = CustomResponseResult>(url: string, config?: AxiosRequestConfig): Promise<T>
 }
 
-export function createHttp (baseUrl?: string): CustomAxiosInstance {
+export function createHttp(baseUrl?: string): CustomAxiosInstance {
   const request = axios.create({
     baseURL: baseUrl || import.meta.env.VITE_APP_BASE_API,
     timeout: 20000 // 请求超时时间
   })
 
-  request.interceptors.request.use(config => {
+  request.interceptors.request.use((config) => {
     const userStore = useUserStore()
     const defHeaders = {
       token: userStore.token
@@ -56,16 +57,19 @@ export function createHttp (baseUrl?: string): CustomAxiosInstance {
     return Promise.reject(data)
   }
 
-  request.interceptors.response.use(response => {
-    return handleResponse(response)
-  }, (err) => {
-    const { response } = err
-    if (response) {
+  request.interceptors.response.use(
+    (response) => {
       return handleResponse(response)
+    },
+    (err) => {
+      const { response } = err
+      if (response) {
+        return handleResponse(response)
+      }
+      console.error(err)
+      return Promise.reject(err)
     }
-    console.error(err)
-    return Promise.reject(err)
-  })
+  )
 
   return request
 }

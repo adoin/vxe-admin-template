@@ -10,7 +10,7 @@ export interface DemoVO {
   describe: string
 }
 
-export function getPubAdminDemoListPage (params?: any) {
+export function getPubAdminDemoListPage(params?: any) {
   return requestAjax({
     url: `/api/pub/admin/demo/list/page/${params.pageSize}/${params.currentPage}`,
     method: 'get',
@@ -18,7 +18,7 @@ export function getPubAdminDemoListPage (params?: any) {
   })
 }
 
-export function getPubAdminDemoDetail (params?: any) {
+export function getPubAdminDemoDetail(params?: any) {
   return requestAjax({
     url: '/api/pub/admin/demo/detail',
     method: 'get',
@@ -26,7 +26,7 @@ export function getPubAdminDemoDetail (params?: any) {
   })
 }
 
-export function postPubAdminDemoSaveInfo (data?: any) {
+export function postPubAdminDemoSaveInfo(data?: any) {
   return requestAjax({
     url: '/api/pub/admin/demo/save/info',
     method: 'post',
@@ -34,7 +34,7 @@ export function postPubAdminDemoSaveInfo (data?: any) {
   })
 }
 
-export function postPubAdminDemoSaveBatch (data?: any) {
+export function postPubAdminDemoSaveBatch(data?: any) {
   return requestAjax({
     url: '/api/pub/admin/demo/save/batch',
     method: 'post',
@@ -42,7 +42,7 @@ export function postPubAdminDemoSaveBatch (data?: any) {
   })
 }
 
-export function deletePubAdminDemoDelete (data?: any) {
+export function deletePubAdminDemoDelete(data?: any) {
   return requestAjax({
     url: '/api/pub/admin/demo/delete',
     method: 'delete',

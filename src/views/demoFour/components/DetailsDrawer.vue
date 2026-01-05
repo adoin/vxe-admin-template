@@ -1,21 +1,8 @@
-<template>
-  <vxe-drawer
-   show-footer
-   show-confirm-button
-   destroy-on-close
-   confirm-button-text="关闭"
-   width="60vw"
-   v-model="showPopup"
-   title="详情"
-   :loading="loading">
-   <vxe-form ref="formRef" v-bind="formOptions"></vxe-form>
-  </vxe-drawer>
-</template>
-
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import { VxeFormProps } from 'vxe-pc-ui'
-import { DemoVO, getPubAdminDemoDetail } from '@/api/demo'
+import type { VxeFormProps } from 'vxe-pc-ui'
+import type { DemoVO} from '@/api/demo';
+import { reactive, ref } from 'vue'
+import { getPubAdminDemoDetail } from '@/api/demo'
 
 const showPopup = ref(false)
 const loading = ref(false)
@@ -47,17 +34,33 @@ const loadDetailInfo = async () => {
     })
     const info: DemoVO = res.data
     formOptions.data = info
-  } catch (e) {
+  } catch {
+    // 忽略错误
   } finally {
     loading.value = false
   }
 }
 
 defineExpose({
-  open (id: string) {
+  open(id: string) {
     detailId.value = id
     showPopup.value = true
     loadDetailInfo()
   }
 })
 </script>
+
+<template>
+  <vxe-drawer
+    v-model="showPopup"
+    confirm-button-text="关闭"
+    destroy-on-close
+    :loading="loading"
+    show-confirm-button
+    show-footer
+    title="详情"
+    width="60vw"
+  >
+    <vxe-form v-bind="formOptions"></vxe-form>
+  </vxe-drawer>
+</template>

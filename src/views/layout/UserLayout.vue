@@ -1,32 +1,32 @@
+<script lang="ts" setup>
+import { useAppStore } from '@/store/app'
+import AsideView from './AsideView.vue'
+import FooterView from './FooterView.vue'
+import HeaderView from './HeaderView.vue'
+import TopView from './TopView.vue'
+
+const appStore = useAppStore()
+</script>
+
 <template>
   <vxe-layout-container :size="appStore.componentsSize">
-    <vxe-layout-aside class="page-aside" :width="240" :collapsed="appStore.collapseAside">
-      <AsideView />
+    <vxe-layout-aside class="page-aside" :collapsed="appStore.collapseAside" :width="240">
+      <aside-view />
     </vxe-layout-aside>
     <vxe-layout-container vertical>
       <vxe-layout-header>
-        <HeaderView />
-        <TopView />
+        <header-view />
+        <top-view />
       </vxe-layout-header>
       <vxe-layout-body :key="appStore.pageKey" class="page-body" show-backtop>
         <RouterView />
       </vxe-layout-body>
       <vxe-layout-footer>
-        <FooterView />
+        <footer-view />
       </vxe-layout-footer>
     </vxe-layout-container>
   </vxe-layout-container>
 </template>
-
-<script lang="ts" setup>
-import HeaderView from './HeaderView.vue'
-import AsideView from './AsideView.vue'
-import TopView from './TopView.vue'
-import FooterView from './FooterView.vue'
-import { useAppStore } from '@/store/app'
-
-const appStore = useAppStore()
-</script>
 
 <style lang="scss" scoped>
 .page-aside {

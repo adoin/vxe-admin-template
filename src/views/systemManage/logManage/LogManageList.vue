@@ -1,15 +1,10 @@
-<template>
-  <PageView>
-    <vxe-grid v-bind="gridOptions"></vxe-grid>
-  </PageView>
-</template>
-
 <script lang="ts" setup>
+import type { VxeFormItemPropTypes } from 'vxe-pc-ui'
+import type { VxeColumnPropTypes, VxeGridProps } from 'vxe-table'
+import type { LogVO} from '@/api/log';
 import { reactive } from 'vue'
-import { VxeGridProps, VxeColumnPropTypes } from 'vxe-table'
-import { VxeFormItemPropTypes } from 'vxe-pc-ui'
-import { LogVO, getPubAdminLogListPage } from '@/api/log'
 import { getPubAdminDictDataConfig } from '@/api/dict'
+import { getPubAdminLogListPage } from '@/api/log'
 
 const typeItemRender = reactive<VxeFormItemPropTypes.ItemRender>({
   name: 'VxeSelect',
@@ -34,7 +29,7 @@ const typeCellRender = reactive<VxeColumnPropTypes.EditRender>({
   ]
 })
 
-getPubAdminDictDataConfig({ code: 'LOG_TYPE' }).then(res => {
+getPubAdminDictDataConfig({ code: 'LOG_TYPE' }).then((res) => {
   typeItemRender.options = res.data
   typeCellRender.options = res.data
 })
@@ -59,7 +54,7 @@ const statusCellRender = reactive<VxeColumnPropTypes.EditRender>({
   ]
 })
 
-getPubAdminDictDataConfig({ code: 'LOG_STATUS' }).then(res => {
+getPubAdminDictDataConfig({ code: 'LOG_STATUS' }).then((res) => {
   statusItemRender.options = res.data
   statusCellRender.options = res.data
 })
@@ -88,8 +83,18 @@ const gridOptions = reactive<VxeGridProps<LogVO>>({
     items: [
       { field: 'content', title: '日志内容', span: 6, itemRender: { name: 'VxeInput', props: { clearable: true } } },
       { field: 'createBy', title: '操作人', span: 6, itemRender: { name: 'VxeInput', props: { clearable: true } } },
-      { field: 'startDate', title: '开始时间', span: 6, itemRender: { name: 'VxeDatePicker', props: { clearable: true } } },
-      { field: 'endDate', title: '结束时间', span: 6, itemRender: { name: 'VxeDatePicker', props: { clearable: true } } },
+      {
+        field: 'startDate',
+        title: '开始时间',
+        span: 6,
+        itemRender: { name: 'VxeDatePicker', props: { clearable: true } }
+      },
+      {
+        field: 'endDate',
+        title: '结束时间',
+        span: 6,
+        itemRender: { name: 'VxeDatePicker', props: { clearable: true } }
+      },
       { field: 'type', title: '日志类型', span: 6, folding: true, itemRender: typeItemRender },
       { field: 'status', title: '日志状态', span: 6, folding: true, itemRender: statusItemRender },
       { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'ListSearchBtn' } }
@@ -108,11 +113,11 @@ const gridOptions = reactive<VxeGridProps<LogVO>>({
     form: true,
     sort: true,
     ajax: {
-      query ({ page, form, sorts }) {
+      query({ page, form, sorts }) {
         const params = {
           ...page,
           ...form,
-          orderBy: sorts.map(item => `${item.field}|${item.order}`).join(',')
+          orderBy: sorts.map((item) => `${item.field}|${item.order}`).join(',')
         }
         return getPubAdminLogListPage(params)
       }
@@ -120,3 +125,9 @@ const gridOptions = reactive<VxeGridProps<LogVO>>({
   }
 })
 </script>
+
+<template>
+  <PageView>
+    <vxe-grid v-bind="gridOptions"></vxe-grid>
+  </PageView>
+</template>

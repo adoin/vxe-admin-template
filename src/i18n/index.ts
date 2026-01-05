@@ -6,7 +6,12 @@ const languageList = ['zh-CN', 'en-US']
 const customLanguage = localStorage.getItem('APP_LANGUAGE')
 const i18n = createI18n({
   warnHtmlMessage: false,
-  locale: customLanguage && languageList.includes(customLanguage) ? customLanguage : ['zh-CN', 'zh-HK', 'zh-MO', 'zh-TW'].includes(navigator.language) ? 'zh-CN' : 'en-US',
+  locale:
+    customLanguage && languageList.includes(customLanguage)
+      ? customLanguage
+      : ['zh-CN', 'zh-HK', 'zh-MO', 'zh-TW'].includes(navigator.language)
+        ? 'zh-CN'
+        : 'en-US',
   messages: {}
 })
 

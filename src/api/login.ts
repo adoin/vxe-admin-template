@@ -1,6 +1,6 @@
 import { requestAjax } from './http'
 
-export function getPubAdminLoginInfo (params?: any) {
+export function getPubAdminLoginInfo(params?: any) {
   return requestAjax({
     url: '/api/pub/admin/login/info',
     method: 'get',
@@ -8,7 +8,7 @@ export function getPubAdminLoginInfo (params?: any) {
   })
 }
 
-export function postPubAdminLoginValid (data?: any) {
+export function postPubAdminLoginValid(data?: any) {
   return requestAjax({
     url: '/api/pub/admin/login/valid',
     method: 'post',
@@ -16,7 +16,7 @@ export function postPubAdminLoginValid (data?: any) {
   })
 }
 
-export function postPubAdminLoginRegister (data?: any) {
+export function postPubAdminLoginRegister(data?: any) {
   return requestAjax({
     url: '/api/pub/admin/login/register',
     method: 'post',
@@ -24,7 +24,7 @@ export function postPubAdminLoginRegister (data?: any) {
   })
 }
 
-export function postPubAdminLogout (data?: any) {
+export function postPubAdminLogout(data?: any) {
   return requestAjax({
     url: '/api/pub/admin/logout',
     method: 'post',

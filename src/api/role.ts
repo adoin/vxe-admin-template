@@ -8,7 +8,7 @@ export interface RoleVO {
   level: number
 }
 
-export function getPubAdminRoleOptions (params?: any) {
+export function getPubAdminRoleOptions(params?: any) {
   return requestAjax({
     url: '/api/pub/admin/role/options',
     method: 'get',
@@ -16,7 +16,7 @@ export function getPubAdminRoleOptions (params?: any) {
   })
 }
 
-export function getPubAdminRoleListPage (params?: any) {
+export function getPubAdminRoleListPage(params?: any) {
   return requestAjax({
     url: `/api/pub/admin/role/list/page/${params.pageSize}/${params.currentPage}`,
     method: 'get',
@@ -24,7 +24,7 @@ export function getPubAdminRoleListPage (params?: any) {
   })
 }
 
-export function postPubAdminRoleSaveBatch (data?: any) {
+export function postPubAdminRoleSaveBatch(data?: any) {
   return requestAjax({
     url: '/api/pub/admin/role/save/batch',
     method: 'post',
@@ -32,7 +32,7 @@ export function postPubAdminRoleSaveBatch (data?: any) {
   })
 }
 
-export function deletePubAdminRoleDelete (data?: any) {
+export function deletePubAdminRoleDelete(data?: any) {
   return requestAjax({
     url: '/api/pub/admin/role/delete',
     method: 'delete',

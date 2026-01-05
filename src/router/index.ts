@@ -1,24 +1,31 @@
-import { createRouter, createWebHashHistory, RouteLocationNormalizedGeneric, RouteLocationNormalizedLoadedGeneric, NavigationGuardNext } from 'vue-router'
+import type {
+  NavigationGuardNext,
+  RouteLocationNormalizedGeneric,
+  RouteLocationNormalizedLoadedGeneric
+} from 'vue-router';
+import NProgress from 'nprogress'
+import {
+  createRouter,
+  createWebHashHistory
+} from 'vue-router'
 import { VxeUI } from 'vxe-pc-ui'
-import { routeConfigs } from './config'
 import { useAppStore } from '@/store/app'
 import { useUserStore } from '@/store/user'
 import { routeToMenuName } from '@/utils'
-import NProgress from 'nprogress'
+import { routeConfigs } from './config'
 
-const publicRouteList = [
-  'PageError404',
-  'PageError403',
-  'LoginView',
-  'RegisterView'
-]
+const publicRouteList = ['PageError404', 'PageError403', 'LoginView', 'RegisterView']
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: routeConfigs
 })
 
-const handleRoutePermission = (to: RouteLocationNormalizedGeneric, _from: RouteLocationNormalizedLoadedGeneric, next: NavigationGuardNext) => {
+const handleRoutePermission = (
+  to: RouteLocationNormalizedGeneric,
+  _from: RouteLocationNormalizedLoadedGeneric,
+  next: NavigationGuardNext
+) => {
   const userStore = useUserStore()
 
   // 如果是默认首页
@@ -31,7 +38,7 @@ const handleRoutePermission = (to: RouteLocationNormalizedGeneric, _from: RouteL
       })
       return
     }
-    console.log('无默认菜单', to)
+    console.warn('无默认菜单', to)
     next({
       name: 'PageError403'
     })
@@ -42,7 +49,7 @@ const handleRoutePermission = (to: RouteLocationNormalizedGeneric, _from: RouteL
     next()
     return
   }
-  console.log('无权限访问', to)
+  console.warn('无权限访问', to)
   next({
     name: 'PageError403'
   })
@@ -62,13 +69,16 @@ router.beforeEach((to, from, next) => {
     handleRoutePermission(to, from, next)
     return
   }
-  userStore.initServer().then(() => {
-    handleRoutePermission(to, from, next)
-  }).catch(() => {
-    next({
-      name: 'LoginView'
+  userStore
+    .initServer()
+    .then(() => {
+      handleRoutePermission(to, from, next)
     })
-  })
+    .catch(() => {
+      next({
+        name: 'LoginView'
+      })
+    })
 })
 
 router.afterEach((to) => {

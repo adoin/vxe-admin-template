@@ -1,11 +1,7 @@
-<template>
-  <div ref="chartElem" class="e-charts" :style="{height: `${height}px`}"></div>
-</template>
-
 <script lang="ts" setup>
-import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
-import * as echarts from 'echarts'
 import type { EChartsType } from 'echarts'
+import * as echarts from 'echarts'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
 const props = defineProps({
   height: Number,
@@ -33,9 +29,12 @@ const winResizeEvent = () => {
   }
 }
 
-watch(() => props.options, () => {
-  loadChart()
-})
+watch(
+  () => props.options,
+  () => {
+    loadChart()
+  }
+)
 
 onMounted(() => {
   loadChart()
@@ -46,6 +45,10 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', winResizeEvent)
 })
 </script>
+
+<template>
+  <div ref="chartElem" class="e-charts" :style="{ height: `${height}px` }"></div>
+</template>
 
 <style lang="scss" scoped>
 .e-charts {

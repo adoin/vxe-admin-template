@@ -1,27 +1,10 @@
-<template>
-  <PageView>
-    <vxe-grid ref="gridRef" v-bind="gridOptions" v-on="gridEvents">
-      <template #default_name="{ row }">
-        <vxe-button v-if="VxeUI.permission.checkVisible('demoThreeActionUpdate')" mode="text" status="primary" @click="openRow(row)">{{ row.name }}</vxe-button>
-        <span v-else>{{ row.name }}</span>
-      </template>
-
-      <template #action="{ row }">
-        <vxe-button mode="text" status="primary" icon="vxe-icon-edit"  permission-code="demoThreeActionUpdate" @click="editRow(row)">编辑</vxe-button>
-        <vxe-button mode="text" status="error" icon="vxe-icon-delete" @click="removeRow(row)" permission-code="demoThreeActionDelete">删除</vxe-button>
-      </template>
-    </vxe-grid>
-
-    <DetailsPopup ref="detailsRef" />
-    <EditPopup ref="editRef" @save="saveEvent" @add="addEvent" />
-  </PageView>
-</template>
-
 <script lang="ts" setup>
-import { ref, reactive, ComponentInstance } from 'vue'
-import { VxeGridInstance, VxeGridProps, VxeGridListeners } from 'vxe-table'
+import type { ComponentInstance } from 'vue';
+import type { VxeGridInstance, VxeGridListeners, VxeGridProps } from 'vxe-table'
+import type { DemoVO} from '@/api/demo';
+import { reactive, ref } from 'vue'
 import { VxeUI } from 'vxe-pc-ui'
-import { DemoVO, getPubAdminDemoListPage, postPubAdminDemoSaveBatch, deletePubAdminDemoDelete } from '@/api/demo'
+import { deletePubAdminDemoDelete, getPubAdminDemoListPage, postPubAdminDemoSaveBatch } from '@/api/demo'
 import DetailsPopup from './components/DetailsPopup.vue'
 import EditPopup from './components/EditPopup.vue'
 
@@ -49,7 +32,13 @@ const gridOptions = reactive<VxeGridProps<DemoVO>>({
     zoom: true,
     buttons: [
       { name: '新增', code: 'ADD', status: 'primary', icon: 'vxe-icon-add', permissionCode: 'demoThreeActionInsert' },
-      { name: '批量删除', code: 'delete', status: 'error', icon: 'vxe-icon-delete', permissionCode: 'demoThreeActionDelete' }
+      {
+        name: '批量删除',
+        code: 'delete',
+        status: 'error',
+        icon: 'vxe-icon-delete',
+        permissionCode: 'demoThreeActionDelete'
+      }
     ]
   },
   formConfig: {
@@ -60,8 +49,20 @@ const gridOptions = reactive<VxeGridProps<DemoVO>>({
       { field: 'nickname', title: '昵称', span: 6, itemRender: { name: 'VxeInput' } },
       { field: 'code', title: '编码', span: 6, itemRender: { name: 'VxeInput' } },
       { field: 'amount', title: '金额', span: 6, itemRender: { name: 'VxeNumberInput' } },
-      { field: 'startDate', title: '开始时间', span: 6, folding: true, itemRender: { name: 'VxeDatePicker', props: { clearable: true } } },
-      { field: 'endDate', title: '结束时间', span: 6, folding: true, itemRender: { name: 'VxeDatePicker', props: { clearable: true } } },
+      {
+        field: 'startDate',
+        title: '开始时间',
+        span: 6,
+        folding: true,
+        itemRender: { name: 'VxeDatePicker', props: { clearable: true } }
+      },
+      {
+        field: 'endDate',
+        title: '结束时间',
+        span: 6,
+        folding: true,
+        itemRender: { name: 'VxeDatePicker', props: { clearable: true } }
+      },
       { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'ListSearchBtn' } }
     ]
   },
@@ -83,15 +84,15 @@ const gridOptions = reactive<VxeGridProps<DemoVO>>({
     form: true,
     sort: true,
     ajax: {
-      query ({ page, form, sorts }) {
+      query({ page, form, sorts }) {
         const params = {
           ...page,
           ...form,
-          orderBy: sorts.map(item => `${item.field}|${item.order}`).join(',')
+          orderBy: sorts.map((item) => `${item.field}|${item.order}`).join(',')
         }
         return getPubAdminDemoListPage(params)
       },
-      delete ({ body }) {
+      delete({ body }) {
         return postPubAdminDemoSaveBatch({
           ...body
         })
@@ -101,7 +102,7 @@ const gridOptions = reactive<VxeGridProps<DemoVO>>({
 })
 
 const gridEvents: VxeGridListeners = {
-  toolbarButtonClick ({ code }) {
+  toolbarButtonClick({ code }) {
     switch (code) {
       case 'ADD':
         editRef.value?.add()
@@ -154,3 +155,42 @@ const addEvent = () => {
   }
 }
 </script>
+
+<template>
+  <PageView>
+    <vxe-grid ref="gridRef" v-bind="gridOptions" v-on="gridEvents">
+      <template #default_name="{ row }">
+        <vxe-button
+          v-if="VxeUI.permission.checkVisible('demoThreeActionUpdate')"
+          mode="text"
+          status="primary"
+          @click="openRow(row)"
+          >{{ row.name }}</vxe-button
+        >
+        <span v-else>{{ row.name }}</span>
+      </template>
+
+      <template #action="{ row }">
+        <vxe-button
+          icon="vxe-icon-edit"
+          mode="text"
+          permission-code="demoThreeActionUpdate"
+          status="primary"
+          @click="editRow(row)"
+          >编辑</vxe-button
+        >
+        <vxe-button
+          icon="vxe-icon-delete"
+          mode="text"
+          permission-code="demoThreeActionDelete"
+          status="error"
+          @click="removeRow(row)"
+          >删除</vxe-button
+        >
+      </template>
+    </vxe-grid>
+
+    <details-popup ref="detailsRef" />
+    <edit-popup ref="editRef" @add="addEvent" @save="saveEvent" />
+  </PageView>
+</template>

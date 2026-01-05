@@ -1,10 +1,3 @@
-<template>
-  <div :class="['page-view', {'is-pg': padding, 'is-bg': background}]">
-    <slot></slot>
-    <vxe-loading :modelValue="loading" :text="loadingText"></vxe-loading>
-  </div>
-</template>
-
 <script lang="ts" setup>
 defineProps({
   loading: Boolean,
@@ -19,6 +12,13 @@ defineProps({
   }
 })
 </script>
+
+<template>
+  <div class="page-view" :class="[{ 'is-pg': padding, 'is-bg': background }]">
+    <slot></slot>
+    <vxe-loading :model-value="loading" :text="loadingText"></vxe-loading>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .page-view {

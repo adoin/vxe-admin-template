@@ -1,15 +1,3 @@
-<template>
-  <vxe-card title="用户访问量" :loading="loading" :border="false" :padding="false" width="100%">
-    <template #extra>
-      <vxe-button mode="text" icon="vxe-icon-refresh" @click="loadData()"></vxe-button>
-    </template>
-
-    <template #default>
-      <ECharts :options="chartOptions"></ECharts>
-    </template>
-  </vxe-card>
-</template>
-
 <script lang="ts" setup>
 import { ref } from 'vue'
 import ECharts from '@/components/ECharts.vue'
@@ -56,3 +44,15 @@ const loadData = () => {
 
 loadData()
 </script>
+
+<template>
+  <vxe-card :border="false" :loading="loading" :padding="false" title="用户访问量" width="100%">
+    <template #extra>
+      <vxe-button icon="vxe-icon-refresh" mode="text" @click="loadData()"></vxe-button>
+    </template>
+
+    <template #default>
+      <e-charts :options="chartOptions"></e-charts>
+    </template>
+  </vxe-card>
+</template>

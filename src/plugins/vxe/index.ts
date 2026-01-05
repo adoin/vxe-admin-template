@@ -1,8 +1,8 @@
-import VxeUI from 'vxe-pc-ui'
+import VxeUIPluginExportXLSX from '@vxe-ui/plugin-export-xlsx'
 
 import VxeUIPluginMenu from '@vxe-ui/plugin-menu'
-import VxeUIPluginExportXLSX from '@vxe-ui/plugin-export-xlsx'
 import VxeUIPluginRenderWangEditor from '@vxe-ui/plugin-render-wangeditor'
+import VxeUI from 'vxe-pc-ui'
 import '@vxe-ui/plugin-render-wangeditor/dist/style.css'
 
 import './config'

@@ -1,19 +1,16 @@
-<template>
-  <PageView>
-    <vxe-grid ref="gridRef" v-bind="gridOptions">
-      <template #action="{ row }">
-        <vxe-button mode="text" status="error" icon="vxe-icon-delete" permission-code="dictManageActionDelete" @click="removeRow(row)"></vxe-button>
-      </template>
-    </vxe-grid>
-  </PageView>
-</template>
-
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
+import type { VxeGridInstance, VxeGridProps } from 'vxe-table'
+import type {
+  DictVO
+} from '@/api/dict';
+import { reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { VxeGridInstance, VxeGridProps } from 'vxe-table'
 import { VxeUI } from 'vxe-pc-ui'
-import { DictVO, getPubAdminDictDataListPage, postPubAdminDictDataSaveBatch, deletePubAdminDictDataDelete } from '@/api/dict'
+import {
+  deletePubAdminDictDataDelete,
+  getPubAdminDictDataListPage,
+  postPubAdminDictDataSaveBatch
+} from '@/api/dict'
 
 const route = useRoute()
 
@@ -43,9 +40,27 @@ const gridOptions = reactive<VxeGridProps<DictVO>>({
     refresh: true,
     zoom: true,
     buttons: [
-      { name: '新增', code: 'insert_edit', status: 'primary', icon: 'vxe-icon-add', permissionCode: 'dictManageActionInsert' },
-      { name: '标记/删除', code: 'mark_cancel', status: 'error', icon: 'vxe-icon-delete', permissionCode: 'dictManageActionDelete' },
-      { name: '保存', code: 'save', status: 'success', icon: 'vxe-icon-save', permissionCode: 'dictManageActionInsert|dictManageActionDelete|dictManageActionUpdate' }
+      {
+        name: '新增',
+        code: 'insert_edit',
+        status: 'primary',
+        icon: 'vxe-icon-add',
+        permissionCode: 'dictManageActionInsert'
+      },
+      {
+        name: '标记/删除',
+        code: 'mark_cancel',
+        status: 'error',
+        icon: 'vxe-icon-delete',
+        permissionCode: 'dictManageActionDelete'
+      },
+      {
+        name: '保存',
+        code: 'save',
+        status: 'success',
+        icon: 'vxe-icon-save',
+        permissionCode: 'dictManageActionInsert|dictManageActionDelete|dictManageActionUpdate'
+      }
     ]
   },
   formConfig: {
@@ -79,16 +94,16 @@ const gridOptions = reactive<VxeGridProps<DictVO>>({
     form: true,
     sort: true,
     ajax: {
-      query ({ page, form, sorts }) {
+      query({ page, form, sorts }) {
         const params = {
           ...page,
           ...form,
           pId: route.query.pId,
-          orderBy: sorts.map(item => `${item.field}|${item.order}`).join(',')
+          orderBy: sorts.map((item) => `${item.field}|${item.order}`).join(',')
         }
         return getPubAdminDictDataListPage(params)
       },
-      save ({ body }) {
+      save({ body }) {
         return postPubAdminDictDataSaveBatch({
           ...body,
           pId: route.query.pId
@@ -120,3 +135,19 @@ const removeRow = async (row: DictVO) => {
   }
 }
 </script>
+
+<template>
+  <PageView>
+    <vxe-grid ref="gridRef" v-bind="gridOptions">
+      <template #action="{ row }">
+        <vxe-button
+          icon="vxe-icon-delete"
+          mode="text"
+          permission-code="dictManageActionDelete"
+          status="error"
+          @click="removeRow(row)"
+        ></vxe-button>
+      </template>
+    </vxe-grid>
+  </PageView>
+</template>

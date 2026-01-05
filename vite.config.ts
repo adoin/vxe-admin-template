@@ -1,11 +1,13 @@
-import { UserConfig, ConfigEnv, loadEnv } from 'vite'
-import path from 'path'
-import XEUtils from 'xe-utils'
+import type { ConfigEnv, UserConfig } from 'vite'
+import path from 'node:path'
+import process from 'node:process'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import { createHtmlPlugin } from 'vite-plugin-html'
 import externalGlobals from 'rollup-plugin-external-globals'
+import { loadEnv } from 'vite'
+import { createHtmlPlugin } from 'vite-plugin-html'
 import zipPack from 'vite-plugin-zip-pack'
+import XEUtils from 'xe-utils'
 
 // https://vitejs.dev/config/
 export default ({ mode }: ConfigEnv): UserConfig => {

@@ -1,24 +1,9 @@
-<template>
-  <PageView>
-    <vxe-grid ref="gridRef" v-bind="gridOptions">
-      <template #default_name="{ row }">
-        <vxe-link v-if="VxeUI.permission.checkVisible('DemoTwoDetails')" status="primary" :router-link="{ name: 'DemoTwoDetails', query: { id: row._id } }">{{ row.name }}</vxe-link>
-        <span v-else>{{ row.name }}</span>
-      </template>
-
-      <template #action="{ row }">
-        <vxe-link status="primary" icon="vxe-icon-edit" :router-link="{ name: 'DemoTwoEdit', query: { id: row._id } }" permission-code="DemoTwoEdit">编辑</vxe-link>
-        <vxe-button mode="text" status="error" icon="vxe-icon-delete" @click="removeRow(row)" permission-code="demoTwoActionDelete">删除</vxe-button>
-      </template>
-    </vxe-grid>
-  </PageView>
-</template>
-
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import { VxeGridInstance, VxeGridProps } from 'vxe-table'
+import type { VxeGridInstance, VxeGridProps } from 'vxe-table'
+import type { DemoVO} from '@/api/demo';
+import { reactive, ref } from 'vue'
 import { VxeUI } from 'vxe-pc-ui'
-import { DemoVO, getPubAdminDemoListPage, postPubAdminDemoSaveBatch, deletePubAdminDemoDelete } from '@/api/demo'
+import { deletePubAdminDemoDelete, getPubAdminDemoListPage, postPubAdminDemoSaveBatch } from '@/api/demo'
 
 const gridRef = ref<VxeGridInstance<DemoVO>>()
 
@@ -41,8 +26,20 @@ const gridOptions = reactive<VxeGridProps<DemoVO>>({
     refresh: true,
     zoom: true,
     buttons: [
-      { name: '新增', status: 'primary', icon: 'vxe-icon-add', permissionCode: 'DemoTwoAdd', routerLink: { name: 'DemoTwoAdd' } },
-      { name: '批量删除', code: 'delete', status: 'error', icon: 'vxe-icon-delete', permissionCode: 'demoTwoActionDelete' }
+      {
+        name: '新增',
+        status: 'primary',
+        icon: 'vxe-icon-add',
+        permissionCode: 'DemoTwoAdd',
+        routerLink: { name: 'DemoTwoAdd' }
+      },
+      {
+        name: '批量删除',
+        code: 'delete',
+        status: 'error',
+        icon: 'vxe-icon-delete',
+        permissionCode: 'demoTwoActionDelete'
+      }
     ]
   },
   formConfig: {
@@ -53,8 +50,20 @@ const gridOptions = reactive<VxeGridProps<DemoVO>>({
       { field: 'nickname', title: '昵称', span: 6, itemRender: { name: 'VxeInput' } },
       { field: 'code', title: '编码', span: 6, itemRender: { name: 'VxeInput' } },
       { field: 'amount', title: '金额', span: 6, itemRender: { name: 'VxeNumberInput' } },
-      { field: 'startDate', title: '开始时间', span: 6, folding: true, itemRender: { name: 'VxeDatePicker', props: { clearable: true } } },
-      { field: 'endDate', title: '结束时间', span: 6, folding: true, itemRender: { name: 'VxeDatePicker', props: { clearable: true } } },
+      {
+        field: 'startDate',
+        title: '开始时间',
+        span: 6,
+        folding: true,
+        itemRender: { name: 'VxeDatePicker', props: { clearable: true } }
+      },
+      {
+        field: 'endDate',
+        title: '结束时间',
+        span: 6,
+        folding: true,
+        itemRender: { name: 'VxeDatePicker', props: { clearable: true } }
+      },
       { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'ListSearchBtn' } }
     ]
   },
@@ -76,15 +85,15 @@ const gridOptions = reactive<VxeGridProps<DemoVO>>({
     form: true,
     sort: true,
     ajax: {
-      query ({ page, form, sorts }) {
+      query({ page, form, sorts }) {
         const params = {
           ...page,
           ...form,
-          orderBy: sorts.map(item => `${item.field}|${item.order}`).join(',')
+          orderBy: sorts.map((item) => `${item.field}|${item.order}`).join(',')
         }
         return getPubAdminDemoListPage(params)
       },
-      delete ({ body }) {
+      delete({ body }) {
         return postPubAdminDemoSaveBatch({
           ...body
         })
@@ -115,3 +124,37 @@ const removeRow = async (row: DemoVO) => {
   }
 }
 </script>
+
+<template>
+  <PageView>
+    <vxe-grid ref="gridRef" v-bind="gridOptions">
+      <template #default_name="{ row }">
+        <vxe-link
+          v-if="VxeUI.permission.checkVisible('DemoTwoDetails')"
+          :router-link="{ name: 'DemoTwoDetails', query: { id: row._id } }"
+          status="primary"
+          >{{ row.name }}</vxe-link
+        >
+        <span v-else>{{ row.name }}</span>
+      </template>
+
+      <template #action="{ row }">
+        <vxe-link
+          icon="vxe-icon-edit"
+          permission-code="DemoTwoEdit"
+          :router-link="{ name: 'DemoTwoEdit', query: { id: row._id } }"
+          status="primary"
+          >编辑</vxe-link
+        >
+        <vxe-button
+          icon="vxe-icon-delete"
+          mode="text"
+          permission-code="demoTwoActionDelete"
+          status="error"
+          @click="removeRow(row)"
+          >删除</vxe-button
+        >
+      </template>
+    </vxe-grid>
+  </PageView>
+</template>

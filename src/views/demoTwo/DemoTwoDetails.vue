@@ -1,14 +1,9 @@
-<template>
-   <PageView :loading="loading">
-     <vxe-form v-bind="formOptions"></vxe-form>
-   </PageView>
-</template>
-
 <script lang="ts" setup>
-import { ref, reactive, watch } from 'vue'
+import type { VxeFormProps } from 'vxe-pc-ui'
+import type { DemoVO} from '@/api/demo';
+import { reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { VxeFormProps } from 'vxe-pc-ui'
-import { DemoVO, getPubAdminDemoDetail } from '@/api/demo'
+import { getPubAdminDemoDetail } from '@/api/demo'
 
 const route = useRoute()
 
@@ -40,17 +35,27 @@ const loadDetailInfo = async () => {
     })
     const info: DemoVO = res.data
     formOptions.data = info
-  } catch (e) {
+  } catch {
+    // 忽略错误
   } finally {
     loading.value = false
   }
 }
 
-watch(() => route.query.id, () => {
-  loadDetailInfo()
-})
+watch(
+  () => route.query.id,
+  () => {
+    loadDetailInfo()
+  }
+)
 
 if (route.query.id) {
   loadDetailInfo()
 }
 </script>
+
+<template>
+  <PageView :loading="loading">
+    <vxe-form v-bind="formOptions"></vxe-form>
+  </PageView>
+</template>

@@ -1,18 +1,6 @@
-<template>
-  <div class="aside-view">
-    <div class="aside-logo">
-      <img class="logo-img" src="@/assets/logo.png" />
-      <vxe-link v-if="!appStore.collapseAside" href="/" class="logo-title">Vxe 后台管理系统模板v4</vxe-link>
-    </div>
-    <div class="aside-menu">
-      <VxeMenu v-model="currRouteName" :options="userStore.menuTreeList" collapse-fixed />
-    </div>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
-import { useRoute, onBeforeRouteUpdate } from 'vue-router'
+import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import XEUtils from 'xe-utils'
 import { useAppStore } from '@/store/app'
 import { useUserStore } from '@/store/user'
@@ -25,7 +13,7 @@ const userStore = useUserStore()
 const currRouteName = ref('')
 
 const updateSelectMenu = () => {
-  XEUtils.eachTree(userStore.menuTreeList, item => {
+  XEUtils.eachTree(userStore.menuTreeList, (item) => {
     if (item.routerLink && item.routerLink.name === route.name) {
       currRouteName.value = routeToMenuName(route)
     }
@@ -40,12 +28,27 @@ watch(route, () => {
   updateSelectMenu()
 })
 
-watch(() => userStore.menuTreeList, () => {
-  updateSelectMenu()
-})
+watch(
+  () => userStore.menuTreeList,
+  () => {
+    updateSelectMenu()
+  }
+)
 
 updateSelectMenu()
 </script>
+
+<template>
+  <div class="aside-view">
+    <div class="aside-logo">
+      <img class="logo-img" src="@/assets/logo.png" />
+      <vxe-link v-if="!appStore.collapseAside" class="logo-title" href="/">Vxe 后台管理系统模板v4</vxe-link>
+    </div>
+    <div class="aside-menu">
+      <VxeMenu v-model="currRouteName" collapse-fixed :options="userStore.menuTreeList" />
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .aside-view {
@@ -64,11 +67,11 @@ updateSelectMenu()
   }
 }
 
-[data-vxe-ui-theme="light"] {
+[data-vxe-ui-theme='light'] {
   .aside-view {
     ::-webkit-scrollbar-track,
     ::-webkit-scrollbar-corner {
-      background-color: #FFFFFF;
+      background-color: #ffffff;
     }
     ::-webkit-scrollbar-thumb {
       background-color: #bfbfbf;
@@ -80,7 +83,7 @@ updateSelectMenu()
   }
 }
 
-[data-vxe-ui-theme="dark"] {
+[data-vxe-ui-theme='dark'] {
   .aside-view {
     ::-webkit-scrollbar-track,
     ::-webkit-scrollbar-corner {
@@ -91,7 +94,7 @@ updateSelectMenu()
     }
     ::-webkit-scrollbar-thumb:hover,
     ::-webkit-scrollbar-thumb:action {
-      background-color: #A3A6AD;
+      background-color: #a3a6ad;
     }
   }
 }

@@ -1,28 +1,17 @@
-<template>
-  <PageView>
-    <vxe-grid ref="gridRef" v-bind="gridOptions">
-      <template #action="{ row }">
-        <vxe-button mode="text" status="primary" icon="vxe-icon-add-sub" permission-code="routeManageActionInsert" @click="addSubRow(row)"></vxe-button>
-        <vxe-button mode="text" status="error" icon="vxe-icon-delete" permission-code="routeManageActionDelete" @click="removeRow(row)"></vxe-button>
-      </template>
-    </vxe-grid>
-  </PageView>
-</template>
-
 <script lang="ts" setup>
-import XEUtils from 'xe-utils'
+import type { VxeSelectProps, VxeTreeSelectProps } from 'vxe-pc-ui';
+import type { VxeColumnPropTypes, VxeGridInstance, VxeGridProps } from 'vxe-table'
+import type { RouteVO} from '@/api/route';
 import { reactive, ref } from 'vue'
-import { VxeUI, VxeTreeSelectProps, VxeSelectProps } from 'vxe-pc-ui'
-import { VxeGridProps, VxeGridInstance, VxeColumnPropTypes } from 'vxe-table'
-import { RouteVO, getPubAdminRouteListAll, postPubAdminRouteSaveBatch, deletePubAdminRouteDelete } from '@/api/route'
+import { VxeUI } from 'vxe-pc-ui'
+import XEUtils from 'xe-utils'
+import { deletePubAdminRouteDelete, getPubAdminRouteListAll, postPubAdminRouteSaveBatch } from '@/api/route'
 import { routeConfigs } from '@/router/config'
 
 const gridRef = ref<VxeGridInstance<RouteVO>>()
 
-const routeCodeList: any[] = [
-  { value: '', label: '-' }
-]
-XEUtils.eachTree(routeConfigs, item => {
+const routeCodeList: any[] = [{ value: '', label: '-' }]
+XEUtils.eachTree(routeConfigs, (item) => {
   if (item.name && item.component) {
     routeCodeList.push({
       label: item.name,
@@ -92,21 +81,35 @@ const gridOptions = reactive<VxeGridProps<RouteVO>>({
     refresh: true,
     zoom: true,
     buttons: [
-      { name: '新增', code: 'insert_edit', status: 'primary', icon: 'vxe-icon-add', permissionCode: 'routeManageActionInsert' },
-      { name: '标记/删除', code: 'mark_cancel', status: 'error', icon: 'vxe-icon-delete', permissionCode: 'routeManageActionDelete' },
-      { name: '保存', code: 'save', status: 'success', icon: 'vxe-icon-save', permissionCode: 'routeManageActionInsert|routeManageActionDelete|routeManageActionUpdate' }
+      {
+        name: '新增',
+        code: 'insert_edit',
+        status: 'primary',
+        icon: 'vxe-icon-add',
+        permissionCode: 'routeManageActionInsert'
+      },
+      {
+        name: '标记/删除',
+        code: 'mark_cancel',
+        status: 'error',
+        icon: 'vxe-icon-delete',
+        permissionCode: 'routeManageActionDelete'
+      },
+      {
+        name: '保存',
+        code: 'save',
+        status: 'success',
+        icon: 'vxe-icon-save',
+        permissionCode: 'routeManageActionInsert|routeManageActionDelete|routeManageActionUpdate'
+      }
     ]
   },
   editRules: {
-    type: [
-      { required: true, message: '请选择路由类型' }
-    ],
-    name: [
-      { required: true, message: '请输入路由名称' }
-    ],
+    type: [{ required: true, message: '请选择路由类型' }],
+    name: [{ required: true, message: '请输入路由名称' }],
     parentCode: [
       {
-        validator ({ row }) {
+        validator({ row }) {
           if (row.parentCode && row.parentCode === row.code) {
             return new Error('父级不能是自己')
           }
@@ -130,16 +133,16 @@ const gridOptions = reactive<VxeGridProps<RouteVO>>({
   ],
   proxyConfig: {
     ajax: {
-      query ({ page }) {
+      query({ page }) {
         const params = {
           ...page
         }
-        return getPubAdminRouteListAll(params).then(res => {
+        return getPubAdminRouteListAll(params).then((res) => {
           parentCodeEditRender.options = res.data
           return res
         })
       },
-      save ({ body }) {
+      save({ body }) {
         return postPubAdminRouteSaveBatch(body)
       }
     }
@@ -180,3 +183,26 @@ const removeRow = async (row: RouteVO) => {
   }
 }
 </script>
+
+<template>
+  <PageView>
+    <vxe-grid ref="gridRef" v-bind="gridOptions">
+      <template #action="{ row }">
+        <vxe-button
+          icon="vxe-icon-add-sub"
+          mode="text"
+          permission-code="routeManageActionInsert"
+          status="primary"
+          @click="addSubRow(row)"
+        ></vxe-button>
+        <vxe-button
+          icon="vxe-icon-delete"
+          mode="text"
+          permission-code="routeManageActionDelete"
+          status="error"
+          @click="removeRow(row)"
+        ></vxe-button>
+      </template>
+    </vxe-grid>
+  </PageView>
+</template>

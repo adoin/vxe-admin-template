@@ -10,7 +10,7 @@ export interface RouteVO {
   type: 'menu' | 'action'
 }
 
-export function getPubAdminRouteListAll (params?: any) {
+export function getPubAdminRouteListAll(params?: any) {
   return requestAjax({
     url: '/api/pub/admin/route/list/all',
     method: 'get',
@@ -18,7 +18,7 @@ export function getPubAdminRouteListAll (params?: any) {
   })
 }
 
-export function postPubAdminRouteSaveBatch (data?: any) {
+export function postPubAdminRouteSaveBatch(data?: any) {
   return requestAjax({
     url: '/api/pub/admin/route/save/batch',
     method: 'post',
@@ -26,7 +26,7 @@ export function postPubAdminRouteSaveBatch (data?: any) {
   })
 }
 
-export function deletePubAdminRouteDelete (data?: any) {
+export function deletePubAdminRouteDelete(data?: any) {
   return requestAjax({
     url: '/api/pub/admin/route/delete',
     method: 'delete',

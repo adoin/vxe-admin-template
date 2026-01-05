@@ -1,20 +1,11 @@
-<template>
-  <PageView>
-    <vxe-grid ref="gridRef" v-bind="gridOptions" v-on="gridEvents">
-      <template #action="{ row }">
-        <vxe-button v-if="userStore.userRoleLevel < row.level" mode="text" status="error" icon="vxe-icon-delete"
-          permission-code="roleManageActionDelete" @click="removeRow(row)"></vxe-button>
-      </template>
-    </vxe-grid>
-  </PageView>
-</template>
-
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import { VxeGridProps, VxeGridInstance, VxeGridListeners, VxeColumnPropTypes } from 'vxe-table'
-import { VxeUI, VxeFormItemPropTypes, VxeTreeSelectProps, VxeNumberInputProps } from 'vxe-pc-ui'
-import { RoleVO, getPubAdminRoleListPage, postPubAdminRoleSaveBatch, deletePubAdminRoleDelete } from '@/api/role'
+import type { VxeFormItemPropTypes, VxeNumberInputProps, VxeTreeSelectProps } from 'vxe-pc-ui';
+import type { VxeColumnPropTypes, VxeGridInstance, VxeGridListeners, VxeGridProps } from 'vxe-table'
+import type { RoleVO} from '@/api/role';
+import { reactive, ref } from 'vue'
+import { VxeUI } from 'vxe-pc-ui'
 import { getPubAdminPermissionsListAll } from '@/api/permissions'
+import { deletePubAdminRoleDelete, getPubAdminRoleListPage, postPubAdminRoleSaveBatch } from '@/api/role'
 import { useUserStore } from '@/store/user'
 
 const userStore = useUserStore()
@@ -71,7 +62,7 @@ const permissionsCodesItemRender = reactive<VxeFormItemPropTypes.ItemRender<Role
   }
 })
 
-getPubAdminPermissionsListAll({}).then(res => {
+getPubAdminPermissionsListAll({}).then((res) => {
   permissionsCodesEditRender.options = res.data
   permissionsCodesItemRender.options = res.data
 })
@@ -95,12 +86,12 @@ const gridOptions = reactive<VxeGridProps<RoleVO>>({
     mode: 'row',
     showStatus: true,
     enabled: VxeUI.permission.checkVisible('roleManageActionInsert|roleManageActionUpdate'),
-    beforeEditMethod ({ row }) {
+    beforeEditMethod({ row }) {
       return userStore.userRoleLevel < row.level
     }
   },
   checkboxConfig: {
-    checkMethod ({ row }) {
+    checkMethod({ row }) {
       return userStore.userRoleLevel < row.level
     }
   },
@@ -108,15 +99,31 @@ const gridOptions = reactive<VxeGridProps<RoleVO>>({
     refresh: true,
     zoom: true,
     buttons: [
-      { name: '新增', code: 'insert_edit', status: 'primary', icon: 'vxe-icon-add', permissionCode: 'roleManageActionInsert' },
-      { name: '标记/删除', code: 'mark_cancel', status: 'error', icon: 'vxe-icon-delete', permissionCode: 'roleManageActionDelete' },
-      { name: '保存', code: 'save', status: 'success', icon: 'vxe-icon-save', permissionCode: 'roleManageActionInsert|roleManageActionDelete|roleManageActionUpdate' }
+      {
+        name: '新增',
+        code: 'insert_edit',
+        status: 'primary',
+        icon: 'vxe-icon-add',
+        permissionCode: 'roleManageActionInsert'
+      },
+      {
+        name: '标记/删除',
+        code: 'mark_cancel',
+        status: 'error',
+        icon: 'vxe-icon-delete',
+        permissionCode: 'roleManageActionDelete'
+      },
+      {
+        name: '保存',
+        code: 'save',
+        status: 'success',
+        icon: 'vxe-icon-save',
+        permissionCode: 'roleManageActionInsert|roleManageActionDelete|roleManageActionUpdate'
+      }
     ]
   },
   editRules: {
-    name: [
-      { required: true, message: '请输入角色名称' }
-    ]
+    name: [{ required: true, message: '请输入角色名称' }]
   },
   formConfig: {
     items: [
@@ -131,7 +138,17 @@ const gridOptions = reactive<VxeGridProps<RoleVO>>({
     { type: 'seq', width: 70 },
     { field: 'code', title: '角色编码', width: 300, visible: false },
     { field: 'name', title: '角色名称', minWidth: 200, sortable: true, editRender: { name: 'VxeInput' } },
-    { field: 'level', title: '权重', width: 120, sortable: true, editRender: levelEditRender, titlePrefix: { icon: 'vxe-icon-question-circle-fill', content: '角色权重说明：数值越低权限越高，高权重的角色可以修改低权重的数据。' } },
+    {
+      field: 'level',
+      title: '权重',
+      width: 120,
+      sortable: true,
+      editRender: levelEditRender,
+      titlePrefix: {
+        icon: 'vxe-icon-question-circle-fill',
+        content: '角色权重说明：数值越低权限越高，高权重的角色可以修改低权重的数据。'
+      }
+    },
     { field: 'permissionsCodes', title: '关联权限', minWidth: 500, editRender: permissionsCodesEditRender },
     { field: 'remark', title: '备注', minWidth: 300 },
     { field: 'updateTime', title: '最后更新时间', width: 160, formatter: 'FormatDateTime', sortable: true },
@@ -142,16 +159,16 @@ const gridOptions = reactive<VxeGridProps<RoleVO>>({
     sort: true,
     form: true,
     ajax: {
-      query ({ page, form, sorts }) {
+      query({ page, form, sorts }) {
         const params = {
           ...page,
           ...form,
           permissionsCodes: form.permissionsCodes ? form.permissionsCodes.join(',') : '',
-          orderBy: sorts.map(item => `${item.field}|${item.order}`).join(',')
+          orderBy: sorts.map((item) => `${item.field}|${item.order}`).join(',')
         }
         return getPubAdminRoleListPage(params)
       },
-      save ({ body }) {
+      save({ body }) {
         return postPubAdminRoleSaveBatch(body)
       }
     }
@@ -181,7 +198,7 @@ const removeRow = async (row: RoleVO) => {
 }
 
 const gridEvents: VxeGridListeners = {
-  editDisabled () {
+  editDisabled() {
     VxeUI.modal.message({
       id: 'noPermissionEdit',
       content: '无法编辑，权限不够！',
@@ -190,3 +207,20 @@ const gridEvents: VxeGridListeners = {
   }
 }
 </script>
+
+<template>
+  <PageView>
+    <vxe-grid ref="gridRef" v-bind="gridOptions" v-on="gridEvents">
+      <template #action="{ row }">
+        <vxe-button
+          v-if="userStore.userRoleLevel < row.level"
+          icon="vxe-icon-delete"
+          mode="text"
+          permission-code="roleManageActionDelete"
+          status="error"
+          @click="removeRow(row)"
+        ></vxe-button>
+      </template>
+    </vxe-grid>
+  </PageView>
+</template>

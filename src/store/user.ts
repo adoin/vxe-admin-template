@@ -1,8 +1,9 @@
-import XEUtils from 'xe-utils'
+import type { UserInfoVO, UserMenuVO } from '@/api/user';
 import { defineStore } from 'pinia'
 import { VxeUI } from 'vxe-pc-ui'
+import XEUtils from 'xe-utils'
 import { getPubAdminLoginInfo, postPubAdminLoginValid, postPubAdminLogout } from '@/api/login'
-import { postPubAdminUserCurrentChangeRole, UserInfoVO, UserMenuVO } from '@/api/user'
+import { postPubAdminUserCurrentChangeRole } from '@/api/user'
 
 import { routeConfigToMenuName } from '@/utils'
 
@@ -17,32 +18,44 @@ export const useUserStore = defineStore('user', {
     }
   },
   getters: {
-    loginStatus (state) {
+    loginStatus(state) {
       return !!(state.token && state.userInfo)
     },
-    userRoleLevel (state) {
+    userRoleLevel(state) {
       return state.userInfo ? state.userInfo.roleLevel : 900
     },
-    menuTreeList () {
+    menuTreeList() {
       return [
-        ...XEUtils.searchTree(this.routeTreeList, (item) => {
-          return item.type === 'menu'
-        }, { isEvery: true, children: 'childList', mapChildren: 'children' })
+        ...XEUtils.searchTree(
+          this.routeTreeList,
+          (item) => {
+            return item.type === 'menu'
+          },
+          { isEvery: true, children: 'childList', mapChildren: 'children' }
+        )
       ] as UserMenuVO[]
     },
-    menuAllTreeList () {
+    menuAllTreeList() {
       return [
-        ...XEUtils.searchTree(this.routeTreeList, () => true, { isEvery: true, children: 'childList', mapChildren: 'children' })
+        ...XEUtils.searchTree(this.routeTreeList, () => true, {
+          isEvery: true,
+          children: 'childList',
+          mapChildren: 'children'
+        })
       ] as UserMenuVO[]
     },
-    menuNameMaps () {
+    menuNameMaps() {
       const codeMaps: Record<string, UserMenuVO> = {}
-      XEUtils.eachTree(this.routeTreeList, item => {
-        codeMaps[item.name] = item
-      }, { children: 'childList' })
+      XEUtils.eachTree(
+        this.routeTreeList,
+        (item) => {
+          codeMaps[item.name] = item
+        },
+        { children: 'childList' }
+      )
       return codeMaps
     },
-    defaultHomeMenu (this: any) {
+    defaultHomeMenu(this: any) {
       const rest = XEUtils.findTree(this.menuTreeList, (item: any) => item.routerLink)
       if (rest) {
         const { item } = rest
@@ -50,17 +63,17 @@ export const useUserStore = defineStore('user', {
       }
       return null
     },
-    routeConfigList (state) {
+    routeConfigList(state) {
       const { userInfo } = state
       if (userInfo && userInfo.routeList) {
         return [...userInfo.routeList]
       }
       return []
     },
-    routeTreeList (state) {
+    routeTreeList(state) {
       const { userInfo } = state
       if (userInfo && userInfo.routeList) {
-        const routeList = userInfo.routeList.map(item => {
+        const routeList = userInfo.routeList.map((item) => {
           const routeName = item.routeName
           const obj: UserMenuVO = {
             title: item.name,
@@ -88,11 +101,11 @@ export const useUserStore = defineStore('user', {
       }
       return []
     },
-    routePermissionCodeList (state) {
+    routePermissionCodeList(state) {
       const { userInfo } = state
       const codeList: string[] = []
       if (userInfo && userInfo.routeList) {
-        userInfo.routeList.forEach(item => {
+        userInfo.routeList.forEach((item) => {
           codeList.push(item.routeName || item.code)
         })
       }
@@ -103,12 +116,11 @@ export const useUserStore = defineStore('user', {
     /**
      * 刷新token
      */
-    refreshTokenServer () {
-    },
+    refreshTokenServer() {},
     /**
      * 登陆
      */
-    async loginServer (formData?: { name: string, password: string }): Promise<void> {
+    async loginServer(formData?: { name: string; password: string }): Promise<void> {
       const res = await postPubAdminLoginValid(formData)
       this.setToken(res.data)
       return this.updateUserInfo()
@@ -116,26 +128,28 @@ export const useUserStore = defineStore('user', {
     /**
      * 退出登陆
      */
-    logoutServer (): Promise<void> {
+    logoutServer(): Promise<void> {
       VxeUI.loading.open({
         text: '正在退出登录...'
       })
-      return postPubAdminLogout({}).then(() => {
-        this.clearLogin()
-        VxeUI.loading.close()
-      }).catch((e) => {
-        console.log(e)
-        VxeUI.loading.close()
-      })
+      return postPubAdminLogout({})
+        .then(() => {
+          this.clearLogin()
+          VxeUI.loading.close()
+        })
+        .catch((e) => {
+          console.error(e)
+          VxeUI.loading.close()
+        })
     },
-    initServer () {
+    initServer() {
       if (this.token) {
         return this.updateUserInfo()
       }
       const e = false
       return Promise.reject(e)
     },
-    setToken (data: any) {
+    setToken(data: any) {
       const { token, refreshToken } = data
       this.token = token
       this.refreshToken = refreshToken
@@ -145,7 +159,7 @@ export const useUserStore = defineStore('user', {
     /**
      * 清除登录信息
      */
-    clearToken () {
+    clearToken() {
       this.token = ''
       this.refreshToken = ''
       localStorage.removeItem('TOKEN')
@@ -154,13 +168,13 @@ export const useUserStore = defineStore('user', {
     /**
      * 清除用户信息
      */
-    clearUserInfo () {
+    clearUserInfo() {
       this.userInfo = null
     },
     /**
      * 清除登录信息
      */
-    clearLogin () {
+    clearLogin() {
       this.clearToken()
       this.clearUserInfo()
       this.clearUserTabs()
@@ -168,17 +182,17 @@ export const useUserStore = defineStore('user', {
     /**
      * 更新用户信息
      */
-    async updateUserInfo () {
+    async updateUserInfo() {
       const res = await getPubAdminLoginInfo()
       this.userInfo = res.data
     },
     /**
      * 切换角色
-     * @param roleCode
-     * @returns
+     * @param roleCode - 角色代码
+     * @returns Promise，无返回值
      */
-    async changeUserRole (roleCode: any) {
-      const item = this.userInfo?.roleList.find(item => item.value === roleCode)
+    async changeUserRole(roleCode: any) {
+      const item = this.userInfo?.roleList.find((item) => item.value === roleCode)
       if (!item) {
         return
       }
@@ -197,22 +211,21 @@ export const useUserStore = defineStore('user', {
     /**
      * 清除所有页签
      */
-    clearUserTabs () {
+    clearUserTabs() {
       this.activeUserTab = ''
       this.userTabs = []
     },
     /**
      * 更新页签
-     * @param tab
+     * @param tab - 页签对象
+     * @param tab.path - 页签路径
+     * @param tab.name - 页签名称
+     * @param tab.routeName - 路由名称
+     * @param tab.query - 查询参数
+     * @param tab.params - 路由参数
      */
-    updateUserTabs (tab: {
-      path: string
-      name: any
-      routeName: any
-      query: any
-      params: any
-    }) {
-      if (!this.userTabs.some(item => item.name === tab.name)) {
+    updateUserTabs(tab: { path: string; name: any; routeName: any; query: any; params: any }) {
+      if (!this.userTabs.some((item) => item.name === tab.name)) {
         this.userTabs.push({
           name: tab.name,
           routeName: tab.routeName,
@@ -225,13 +238,12 @@ export const useUserStore = defineStore('user', {
     },
     /**
      * 关闭页签
-     * @param tab
-     * @returns
+     * @param tab - 页签对象
+     * @param tab.name - 页签名称
+     * @returns 返回下一个激活的页签对象，如果没有则返回 null
      */
-    removeUserTab (tab: {
-      name: any
-    }) {
-      const index = XEUtils.findIndexOf(this.userTabs, item => item.name === tab.name)
+    removeUserTab(tab: { name: any }) {
+      const index = XEUtils.findIndexOf(this.userTabs, (item) => item.name === tab.name)
       if (index > -1) {
         if (tab.name === this.activeUserTab) {
           const nextItem = this.userTabs[index + 1] || this.userTabs[index - 1]
@@ -249,11 +261,11 @@ export const useUserStore = defineStore('user', {
      * 清除页签
      * @param type
      */
-    clearUserTab (type: 'closeOther' | 'closeLeft' | 'closeRight') {
-      const index = XEUtils.findIndexOf(this.userTabs, item => item.name === this.activeUserTab)
+    clearUserTab(type: 'closeOther' | 'closeLeft' | 'closeRight') {
+      const index = XEUtils.findIndexOf(this.userTabs, (item) => item.name === this.activeUserTab)
       switch (type) {
         case 'closeOther':
-          this.userTabs = this.userTabs.filter(item => item.name === this.activeUserTab)
+          this.userTabs = this.userTabs.filter((item) => item.name === this.activeUserTab)
           break
         case 'closeLeft':
           this.userTabs = this.userTabs.slice(index)

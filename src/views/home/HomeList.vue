@@ -1,28 +1,28 @@
+<script lang="ts" setup>
+import StatisticsModule from './components/StatisticsModule.vue'
+import TodoModule from './components/TodoModule.vue'
+import UserAgeChart from './components/UserAgeChart.vue'
+import UserPvChart from './components/UserPvChart.vue'
+</script>
+
 <template>
-  <PageView class="home-page" :padding="false" :background="false">
+  <PageView :background="false" class="home-page" :padding="false">
     <vxe-row :gutter="[16, 16]" wrap>
       <vxe-col span="24">
-        <StatisticsModule />
+        <statistics-module />
       </vxe-col>
       <vxe-col span="24">
-        <TodoModule />
+        <todo-module />
       </vxe-col>
       <vxe-col span="12">
-        <UserPvChart />
+        <user-pv-chart />
       </vxe-col>
       <vxe-col span="12">
-        <UserAgeChart />
+        <user-age-chart />
       </vxe-col>
     </vxe-row>
   </PageView>
 </template>
-
-<script lang="ts" setup>
-import StatisticsModule from './components/StatisticsModule.vue'
-import TodoModule from './components/TodoModule.vue'
-import UserPvChart from './components/UserPvChart.vue'
-import UserAgeChart from './components/UserAgeChart.vue'
-</script>
 
 <style lang="scss" scoped>
 .home-page {

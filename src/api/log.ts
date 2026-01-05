@@ -6,7 +6,7 @@ export interface LogVO {
   content: string
 }
 
-export function getPubAdminLogListPage (params?: any) {
+export function getPubAdminLogListPage(params?: any) {
   return requestAjax({
     url: `/api/pub/admin/log/list/page/${params.pageSize}/${params.currentPage}`,
     method: 'get',

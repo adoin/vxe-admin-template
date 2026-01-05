@@ -1,19 +1,19 @@
 import { createApp } from 'vue'
+import VxeUIBase from 'vxe-pc-ui'
+import VxeUITable from 'vxe-table'
 import App from './App.vue'
-import router from './router'
 import i18n from './i18n'
+
+import router from './router'
 import pinia from './store'
 
-import VxeUIBase from 'vxe-pc-ui'
+import PageView from './views/layout/PageView.vue'
 import 'vxe-pc-ui/lib/style.css'
 
-import VxeUITable from 'vxe-table'
 import 'vxe-table/lib/style.css'
-
 import './style/style.scss'
-import './plugins'
 
-import PageView from './views/layout/PageView.vue'
+import './plugins'
 
 const app = createApp(App)
 

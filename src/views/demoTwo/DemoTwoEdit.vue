@@ -1,14 +1,10 @@
-<template>
-   <PageView :loading="loading">
-     <vxe-form v-bind="formOptions" @submit="saveEvent"></vxe-form>
-   </PageView>
-</template>
-
 <script lang="ts" setup>
-import { ref, reactive, watch } from 'vue'
+import type { VxeFormProps } from 'vxe-pc-ui';
+import type { DemoVO} from '@/api/demo';
+import { reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { VxeUI, VxeFormProps } from 'vxe-pc-ui'
-import { DemoVO, getPubAdminDemoDetail, postPubAdminDemoSaveInfo } from '@/api/demo'
+import { VxeUI } from 'vxe-pc-ui'
+import { getPubAdminDemoDetail, postPubAdminDemoSaveInfo } from '@/api/demo'
 
 const route = useRoute()
 const router = useRouter()
@@ -28,9 +24,7 @@ const formOptions = reactive<VxeFormProps<DemoVO | null>>({
     describe: ''
   },
   rules: {
-    name: [
-      { required: true, message: '请输入名称' }
-    ]
+    name: [{ required: true, message: '请输入名称' }]
   },
   items: [
     { field: 'name', title: '名称', span: 12, itemRender: { name: 'VxeInput' } },
@@ -52,7 +46,8 @@ const loadFormSettingConfig = async () => {
     })
     const info: DemoVO = res.data
     formOptions.data = info
-  } catch (e) {
+  } catch {
+    // 忽略错误
   } finally {
     loading.value = false
   }
@@ -70,17 +65,27 @@ const saveEvent = async () => {
       status: 'success'
     })
     router.back()
-  } catch (e) {
+  } catch {
+    // 忽略错误
   } finally {
     loading.value = false
   }
 }
 
-watch(() => route.query.id, () => {
-  loadFormSettingConfig()
-})
+watch(
+  () => route.query.id,
+  () => {
+    loadFormSettingConfig()
+  }
+)
 
 if (route.query.id) {
   loadFormSettingConfig()
 }
 </script>
+
+<template>
+  <PageView :loading="loading">
+    <vxe-form v-bind="formOptions" @submit="saveEvent"></vxe-form>
+  </PageView>
+</template>

@@ -1,19 +1,16 @@
-<template>
-  <PageView>
-    <vxe-grid ref="gridRef" v-bind="gridOptions">
-      <template #action="{ row }">
-        <vxe-button mode="text" status="error" icon="vxe-icon-delete" permission-code="permissionsManageActionDelete"
-          @click="removeRow(row)"></vxe-button>
-      </template>
-    </vxe-grid>
-  </PageView>
-</template>
-
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import { VxeGridProps, VxeGridInstance, VxeColumnPropTypes } from 'vxe-table'
-import { VxeUI, VxeTreeSelectProps } from 'vxe-pc-ui'
-import { PermissionsVO, getPubAdminPermissionsListAll, postPubAdminPermissionsSaveBatch, deletePubAdminPermissionsDelete } from '@/api/permissions'
+import type { VxeTreeSelectProps } from 'vxe-pc-ui';
+import type { VxeColumnPropTypes, VxeGridInstance, VxeGridProps } from 'vxe-table'
+import type {
+  PermissionsVO
+} from '@/api/permissions';
+import { reactive, ref } from 'vue'
+import { VxeUI } from 'vxe-pc-ui'
+import {
+  deletePubAdminPermissionsDelete,
+  getPubAdminPermissionsListAll,
+  postPubAdminPermissionsSaveBatch
+} from '@/api/permissions'
 import { getPubAdminRouteListAll } from '@/api/route'
 
 const gridRef = ref<VxeGridInstance<PermissionsVO>>()
@@ -40,7 +37,7 @@ const routeCodesEditRender = reactive<VxeColumnPropTypes.EditRender<PermissionsV
   }
 })
 
-getPubAdminRouteListAll({}).then(res => {
+getPubAdminRouteListAll({}).then((res) => {
   routeCodesEditRender.options = res.data
 })
 
@@ -70,15 +67,31 @@ const gridOptions = reactive<VxeGridProps<PermissionsVO>>({
     refresh: true,
     zoom: true,
     buttons: [
-      { name: '新增', code: 'insert_edit', status: 'primary', icon: 'vxe-icon-add', permissionCode: 'permissionsManageActionInsert' },
-      { name: '标记/删除', code: 'mark_cancel', status: 'error', icon: 'vxe-icon-delete', permissionCode: 'permissionsManageActionDelete' },
-      { name: '保存', code: 'save', status: 'success', icon: 'vxe-icon-save', permissionCode: 'permissionsManageActionInsert|permissionsManageActionDelete|permissionsManageActionUpdate' }
+      {
+        name: '新增',
+        code: 'insert_edit',
+        status: 'primary',
+        icon: 'vxe-icon-add',
+        permissionCode: 'permissionsManageActionInsert'
+      },
+      {
+        name: '标记/删除',
+        code: 'mark_cancel',
+        status: 'error',
+        icon: 'vxe-icon-delete',
+        permissionCode: 'permissionsManageActionDelete'
+      },
+      {
+        name: '保存',
+        code: 'save',
+        status: 'success',
+        icon: 'vxe-icon-save',
+        permissionCode: 'permissionsManageActionInsert|permissionsManageActionDelete|permissionsManageActionUpdate'
+      }
     ]
   },
   editRules: {
-    name: [
-      { required: true, message: '请输入权限名称' }
-    ]
+    name: [{ required: true, message: '请输入权限名称' }]
   },
   columns: [
     { type: 'checkbox', width: 60 },
@@ -92,13 +105,13 @@ const gridOptions = reactive<VxeGridProps<PermissionsVO>>({
   ],
   proxyConfig: {
     ajax: {
-      query ({ page }) {
+      query({ page }) {
         const params = {
           ...page
         }
         return getPubAdminPermissionsListAll(params)
       },
-      save ({ body }) {
+      save({ body }) {
         return postPubAdminPermissionsSaveBatch(body)
       }
     }
@@ -127,3 +140,19 @@ const removeRow = async (row: PermissionsVO) => {
   }
 }
 </script>
+
+<template>
+  <PageView>
+    <vxe-grid ref="gridRef" v-bind="gridOptions">
+      <template #action="{ row }">
+        <vxe-button
+          icon="vxe-icon-delete"
+          mode="text"
+          permission-code="permissionsManageActionDelete"
+          status="error"
+          @click="removeRow(row)"
+        ></vxe-button>
+      </template>
+    </vxe-grid>
+  </PageView>
+</template>

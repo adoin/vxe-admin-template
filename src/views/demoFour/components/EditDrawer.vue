@@ -1,26 +1,10 @@
-<template>
-   <vxe-drawer
-    show-footer
-    destroy-on-close
-    v-model="showPopup"
-    width="60vw"
-    :title="detailId ? '编辑' : '新增'"
-    :loading="loading">
-    <vxe-form ref="formRef" v-bind="formOptions"></vxe-form>
-
-    <template #footer>
-      <vxe-button @click="cancelEvent">取消</vxe-button>
-      <vxe-button type="reset" icon="vxe-icon-repeat" :disabled="loading">重置</vxe-button>
-      <vxe-button type="submit" status="primary" icon="vxe-icon-search" :disabled="loading" @click="saveEvent">保存</vxe-button>
-    </template>
-   </vxe-drawer>
-</template>
-
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import { VxeUI, VxeFormProps, VxeFormInstance } from 'vxe-pc-ui'
-import { DemoVO, getPubAdminDemoDetail, postPubAdminDemoSaveInfo } from '@/api/demo'
+import type { VxeFormInstance, VxeFormProps } from 'vxe-pc-ui';
+import type { DemoVO} from '@/api/demo';
+import { reactive, ref } from 'vue'
+import { VxeUI } from 'vxe-pc-ui'
 import XEUtils from 'xe-utils'
+import { getPubAdminDemoDetail, postPubAdminDemoSaveInfo } from '@/api/demo'
 
 const emit = defineEmits(['save', 'add'])
 
@@ -46,9 +30,7 @@ const formOptions = reactive<VxeFormProps<DemoVO | null>>({
   titleAlign: 'right',
   data: XEUtils.clone(defaultData, true),
   rules: {
-    name: [
-      { required: true, message: '请输入名称' }
-    ]
+    name: [{ required: true, message: '请输入名称' }]
   },
   items: [
     { field: 'name', title: '名称', span: 12, itemRender: { name: 'VxeInput' } },
@@ -68,7 +50,8 @@ const loadDetailInfo = async () => {
     })
     const info: DemoVO = res.data
     formOptions.data = info
-  } catch (e) {
+  } catch {
+    // 忽略错误
   } finally {
     loading.value = false
   }
@@ -91,19 +74,20 @@ const saveEvent = async () => {
     })
     showPopup.value = false
     emit(detailId.value ? 'save' : 'add')
-  } catch (e) {
+  } catch {
+    // 忽略错误
   } finally {
     loading.value = false
   }
 }
 
 defineExpose({
-  add () {
+  add() {
     detailId.value = ''
     showPopup.value = true
     formOptions.data = XEUtils.clone(defaultData, true)
   },
-  edit (id: string) {
+  edit(id: string) {
     detailId.value = id
     showPopup.value = true
     formOptions.data = XEUtils.clone(defaultData, true)
@@ -111,3 +95,24 @@ defineExpose({
   }
 })
 </script>
+
+<template>
+  <vxe-drawer
+    v-model="showPopup"
+    destroy-on-close
+    :loading="loading"
+    show-footer
+    :title="detailId ? '编辑' : '新增'"
+    width="60vw"
+  >
+    <vxe-form ref="formRef" v-bind="formOptions"></vxe-form>
+
+    <template #footer>
+      <vxe-button @click="cancelEvent">取消</vxe-button>
+      <vxe-button :disabled="loading" icon="vxe-icon-repeat" type="reset">重置</vxe-button>
+      <vxe-button :disabled="loading" icon="vxe-icon-search" status="primary" type="submit" @click="saveEvent"
+        >保存</vxe-button
+      >
+    </template>
+  </vxe-drawer>
+</template>

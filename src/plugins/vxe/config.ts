@@ -7,7 +7,7 @@ VxeUI.setConfig({
   version: 0,
   zIndex: 999,
 
-  permissionMethod ({ code }) {
+  permissionMethod({ code }) {
     const userStore = useUserStore()
     if (code) {
       const visible = userStore.routePermissionCodeList.includes(code as string)
@@ -55,13 +55,13 @@ VxeUI.setConfig({
         list: 'data'
       },
       ajax: {
-        deleteSuccess () {
+        deleteSuccess() {
           VxeUI.modal.message({
             content: '删除成功',
             status: 'success'
           })
         },
-        saveSuccess ({ response }) {
+        saveSuccess({ response }) {
           const { data } = response
           VxeUI.modal.message({
             content: `新增 ${data.insertCount} 条，删除 ${data.deleteCount} 条，修改 ${data.updateCount} 条`,
@@ -72,11 +72,11 @@ VxeUI.setConfig({
     }
   },
   upload: {
-    uploadMethod ({ file, updateProgress }) {
+    uploadMethod({ file, updateProgress }) {
       const formData = new FormData()
       formData.append('file', file)
       return postPubAdminUploadSingle(formData, {
-        onUploadProgress (progressEvent) {
+        onUploadProgress(progressEvent) {
           const percentCompleted = Math.round((progressEvent.loaded * 100) / (progressEvent.total || 0))
           updateProgress(percentCompleted)
         }

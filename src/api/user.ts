@@ -59,7 +59,7 @@ export interface UserInfoVO {
   formList: UserFormConfigVO[]
 }
 
-export function getPubAdminUserListPage (params?: any) {
+export function getPubAdminUserListPage(params?: any) {
   return requestAjax({
     url: `/api/pub/admin/user/list/page/${params.pageSize}/${params.currentPage}`,
     method: 'get',
@@ -67,7 +67,7 @@ export function getPubAdminUserListPage (params?: any) {
   })
 }
 
-export function postPubAdminUserCurrentChangeRole (data?: any) {
+export function postPubAdminUserCurrentChangeRole(data?: any) {
   return requestAjax({
     url: '/api/pub/admin/user/current/change/role',
     method: 'post',
@@ -75,7 +75,7 @@ export function postPubAdminUserCurrentChangeRole (data?: any) {
   })
 }
 
-export function postPubAdminUserSaveBatch (data?: any) {
+export function postPubAdminUserSaveBatch(data?: any) {
   return requestAjax({
     url: '/api/pub/admin/user/save/batch',
     method: 'post',
@@ -83,7 +83,7 @@ export function postPubAdminUserSaveBatch (data?: any) {
   })
 }
 
-export function deletePubAdminUserDelete (data?: any) {
+export function deletePubAdminUserDelete(data?: any) {
   return requestAjax({
     url: '/api/pub/admin/user/delete',
     method: 'delete',

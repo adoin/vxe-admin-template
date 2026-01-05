@@ -1,3 +1,5 @@
+<script lang="ts" setup></script>
+
 <template>
   <vxe-layout-container vertical>
     <vxe-layout-body padding>
@@ -7,9 +9,6 @@
     </vxe-layout-body>
   </vxe-layout-container>
 </template>
-
-<script lang="ts" setup>
-</script>
 
 <style lang="scss">
 .login-wrapper {

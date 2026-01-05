@@ -1,24 +1,6 @@
-<template>
-  <vxe-card :border="false" :padding="false" width="100%">
-    <vxe-tabs v-model="selectType" height="400" padding>
-      <vxe-tab-pane title="待处理" name="1">
-        <vxe-grid v-bind="gridOptions1">
-          <template #action>
-            <vxe-button mode="text" status="primary">通过</vxe-button>
-            <vxe-button mode="text" status="error">驳回</vxe-button>
-          </template>
-        </vxe-grid>
-      </vxe-tab-pane>
-      <vxe-tab-pane title="已处理" name="2">
-        <vxe-grid v-bind="gridOptions2"></vxe-grid>
-      </vxe-tab-pane>
-    </vxe-tabs>
-  </vxe-card>
-</template>
-
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
 import type { VxeGridProps } from 'vxe-table'
+import { reactive, ref } from 'vue'
 
 interface RowVO {
   id: number
@@ -43,7 +25,7 @@ const findPageList = (pageSize: number, currentPage: number) => {
     page: {
       total: number
     }
-  }>(resolve => {
+  }>((resolve) => {
     setTimeout(() => {
       resolve({
         data: list.slice((currentPage - 1) * pageSize, currentPage * pageSize),
@@ -72,7 +54,7 @@ const gridOptions1 = reactive<VxeGridProps<RowVO>>({
   ],
   proxyConfig: {
     ajax: {
-      query ({ page }) {
+      query({ page }) {
         return findPageList(page.pageSize, page.currentPage)
       }
     }
@@ -95,10 +77,28 @@ const gridOptions2 = reactive<VxeGridProps<RowVO>>({
   ],
   proxyConfig: {
     ajax: {
-      query ({ page }) {
+      query({ page }) {
         return findPageList(page.pageSize, page.currentPage)
       }
     }
   }
 })
 </script>
+
+<template>
+  <vxe-card :border="false" :padding="false" width="100%">
+    <vxe-tabs v-model="selectType" height="400" padding>
+      <vxe-tab-pane name="1" title="待处理">
+        <vxe-grid v-bind="gridOptions1">
+          <template #action>
+            <vxe-button mode="text" status="primary">通过</vxe-button>
+            <vxe-button mode="text" status="error">驳回</vxe-button>
+          </template>
+        </vxe-grid>
+      </vxe-tab-pane>
+      <vxe-tab-pane name="2" title="已处理">
+        <vxe-grid v-bind="gridOptions2"></vxe-grid>
+      </vxe-tab-pane>
+    </vxe-tabs>
+  </vxe-card>
+</template>

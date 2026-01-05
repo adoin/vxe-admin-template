@@ -1,44 +1,11 @@
-<template>
-  <PageView>
-    <vxe-grid ref="gridRef" v-bind="gridOptions" v-on="gridEvents">
-      <template #top>
-        <vxe-tip status="error" icon="vxe-icon-warning-circle-fill"
-          permission-code="userManageActionInsert">新增用户的初始密码为：<vxe-text click-to-copy>123456</vxe-text>
-        </vxe-tip>
-      </template>
-
-      <template #editName="{ row }">
-        <vxe-input v-model="row.name" :disabled="!!row.code"></vxe-input>
-      </template>
-
-      <template #defaultPictureUrl="{ row }">
-        <VxeUpload
-          singleMode
-          urlMode
-          v-model="row.pictureUrl"
-          :show-button-text="false"
-          :show-remove-button="false"
-          :image-config="{ width: 40, height: 40 }"
-          :readonly="userStore.userRoleLevel >= row.roleLevel || !VxeUI.permission.checkVisible('userManageActionInsert|userManageActionUpdate')"
-          mode="image"
-          button-icon="vxe-icon-edit">
-        </VxeUpload>
-      </template>
-
-      <template #action="{ row }">
-        <vxe-button v-if="userStore.userRoleLevel < row.roleLevel" mode="text" status="error" icon="vxe-icon-delete"
-          permission-code="userManageActionDelete" @click="removeRow(row)"></vxe-button>
-      </template>
-    </vxe-grid>
-  </PageView>
-</template>
-
 <script lang="ts" setup>
-import { ref, reactive } from 'vue'
-import { VxeGridProps, VxeColumnPropTypes, VxeGridInstance, VxeGridListeners } from 'vxe-table'
-import { VxeUI, VxeFormItemPropTypes, VxeSelectProps } from 'vxe-pc-ui'
-import { UserVO, getPubAdminUserListPage, deletePubAdminUserDelete, postPubAdminUserSaveBatch } from '@/api/user'
+import type { VxeFormItemPropTypes, VxeSelectProps } from 'vxe-pc-ui';
+import type { VxeColumnPropTypes, VxeGridInstance, VxeGridListeners, VxeGridProps } from 'vxe-table'
+import type { UserVO} from '@/api/user';
+import { reactive, ref } from 'vue'
+import { VxeUI } from 'vxe-pc-ui'
 import { getPubAdminRoleOptions } from '@/api/role'
+import { deletePubAdminUserDelete, getPubAdminUserListPage, postPubAdminUserSaveBatch } from '@/api/user'
 import { useUserStore } from '@/store/user'
 
 const userStore = useUserStore()
@@ -60,11 +27,9 @@ const roleCodesEditRender = reactive<VxeColumnPropTypes.EditRender<UserVO, VxeSe
     multiple: true
   },
   options: [],
-  defaultValue: [
-    'default'
-  ],
+  defaultValue: ['default'],
   events: {
-    change ({ row }) {
+    change({ row }) {
       if (!row.roleCodes.includes(row.roleCode)) {
         row.roleCode = row.roleCodes[0]
       }
@@ -109,7 +74,7 @@ const gridOptions = reactive<VxeGridProps<UserVO>>({
     mode: 'row',
     showStatus: true,
     enabled: VxeUI.permission.checkVisible('userManageActionInsert|userManageActionUpdate'),
-    beforeEditMethod ({ row, column }) {
+    beforeEditMethod({ row, column }) {
       if (userStore.userRoleLevel >= row.roleLevel) {
         return false
       }
@@ -120,7 +85,7 @@ const gridOptions = reactive<VxeGridProps<UserVO>>({
     }
   },
   checkboxConfig: {
-    checkMethod ({ row }) {
+    checkMethod({ row }) {
       return userStore.userRoleLevel < row.roleLevel
     }
   },
@@ -128,18 +93,32 @@ const gridOptions = reactive<VxeGridProps<UserVO>>({
     refresh: true,
     zoom: true,
     buttons: [
-      { name: '新增', code: 'insert_edit', status: 'primary', icon: 'vxe-icon-add', permissionCode: 'userManageActionInsert' },
-      { name: '标记/删除', code: 'mark_cancel', status: 'error', icon: 'vxe-icon-delete', permissionCode: 'userManageActionDelete' },
-      { name: '保存', code: 'save', status: 'success', icon: 'vxe-icon-save', permissionCode: 'userManageActionInsert|userManageActionDelete|userManageActionUpdate' }
+      {
+        name: '新增',
+        code: 'insert_edit',
+        status: 'primary',
+        icon: 'vxe-icon-add',
+        permissionCode: 'userManageActionInsert'
+      },
+      {
+        name: '标记/删除',
+        code: 'mark_cancel',
+        status: 'error',
+        icon: 'vxe-icon-delete',
+        permissionCode: 'userManageActionDelete'
+      },
+      {
+        name: '保存',
+        code: 'save',
+        status: 'success',
+        icon: 'vxe-icon-save',
+        permissionCode: 'userManageActionInsert|userManageActionDelete|userManageActionUpdate'
+      }
     ]
   },
   editRules: {
-    name: [
-      { required: true, message: '请输入用户名' }
-    ],
-    roleCodes: [
-      { required: true, type: 'array', message: '至少需要授权一个角色' }
-    ]
+    name: [{ required: true, message: '请输入用户名' }],
+    roleCodes: [{ required: true, type: 'array', message: '至少需要授权一个角色' }]
   },
   formConfig: {
     titleWidth: 80,
@@ -150,8 +129,20 @@ const gridOptions = reactive<VxeGridProps<UserVO>>({
       { field: 'email', title: '邮箱', span: 6, itemRender: { name: 'VxeInput', props: { clearable: true } } },
       { field: 'roleCodes', title: '关联角色', span: 6, itemRender: roleCodesItemRender },
       { field: 'roleCode', title: '默认角色', span: 6, folding: true, itemRender: roleCodeItemRender },
-      { field: 'startDate', title: '开始时间', span: 6, folding: true, itemRender: { name: 'VxeDatePicker', props: { clearable: true } } },
-      { field: 'endDate', title: '结束时间', span: 6, folding: true, itemRender: { name: 'VxeDatePicker', props: { clearable: true } } },
+      {
+        field: 'startDate',
+        title: '开始时间',
+        span: 6,
+        folding: true,
+        itemRender: { name: 'VxeDatePicker', props: { clearable: true } }
+      },
+      {
+        field: 'endDate',
+        title: '结束时间',
+        span: 6,
+        folding: true,
+        itemRender: { name: 'VxeDatePicker', props: { clearable: true } }
+      },
       { span: 24, align: 'center', collapseNode: true, itemRender: { name: 'ListSearchBtn' } }
     ]
   },
@@ -160,7 +151,14 @@ const gridOptions = reactive<VxeGridProps<UserVO>>({
     { type: 'checkbox', width: 60 },
     { type: 'seq', width: 70 },
     { field: 'code', title: '用户编码', width: 300, visible: false },
-    { field: 'name', title: '用户名', minWidth: 160, sortable: true, editRender: { name: 'VxeInput' }, slots: { edit: 'editName' } },
+    {
+      field: 'name',
+      title: '用户名',
+      minWidth: 160,
+      sortable: true,
+      editRender: { name: 'VxeInput' },
+      slots: { edit: 'editName' }
+    },
     { field: 'roleCodes', title: '关联角色', minWidth: 300, editRender: roleCodesEditRender },
     { field: 'roleCode', title: '默认角色', width: 140, editRender: roleCodeEditRender },
     { field: 'nickname', title: '昵称', minWidth: 220, editRender: { name: 'VxeInput' } },
@@ -174,16 +172,16 @@ const gridOptions = reactive<VxeGridProps<UserVO>>({
     sort: true,
     form: true,
     ajax: {
-      query ({ page, form, sorts }) {
+      query({ page, form, sorts }) {
         const params = {
           ...page,
           ...form,
           roleCodes: form.roleCodes ? form.roleCodes.join(',') : '',
-          orderBy: sorts.map(item => `${item.field}|${item.order}`).join(',')
+          orderBy: sorts.map((item) => `${item.field}|${item.order}`).join(',')
         }
         return getPubAdminUserListPage(params)
       },
-      save ({ body }) {
+      save({ body }) {
         return postPubAdminUserSaveBatch(body)
       }
     }
@@ -213,7 +211,7 @@ const removeRow = async (row: UserVO) => {
 }
 
 const gridEvents: VxeGridListeners = {
-  editDisabled ({ row }) {
+  editDisabled({ row }) {
     if (userStore.userRoleLevel >= row.roleLevel) {
       VxeUI.modal.message({
         id: 'noPermissionEdit',
@@ -224,10 +222,55 @@ const gridEvents: VxeGridListeners = {
   }
 }
 
-getPubAdminRoleOptions().then(res => {
+getPubAdminRoleOptions().then((res) => {
   roleCodeEditRender.options = res.data
   roleCodesEditRender.options = res.data
   roleCodeItemRender.options = res.data
   roleCodesItemRender.options = res.data
 })
 </script>
+
+<template>
+  <PageView>
+    <vxe-grid ref="gridRef" v-bind="gridOptions" v-on="gridEvents">
+      <template #top>
+        <vxe-tip icon="vxe-icon-warning-circle-fill" permission-code="userManageActionInsert" status="error"
+          >新增用户的初始密码为：<vxe-text click-to-copy>123456</vxe-text>
+        </vxe-tip>
+      </template>
+
+      <template #editName="{ row }">
+        <vxe-input v-model="row.name" :disabled="!!row.code"></vxe-input>
+      </template>
+
+      <template #defaultPictureUrl="{ row }">
+        <VxeUpload
+          v-model="row.pictureUrl"
+          button-icon="vxe-icon-edit"
+          :image-config="{ width: 40, height: 40 }"
+          mode="image"
+          :readonly="
+            userStore.userRoleLevel >= row.roleLevel ||
+            !VxeUI.permission.checkVisible('userManageActionInsert|userManageActionUpdate')
+          "
+          :show-button-text="false"
+          :show-remove-button="false"
+          single-mode
+          url-mode
+        >
+        </VxeUpload>
+      </template>
+
+      <template #action="{ row }">
+        <vxe-button
+          v-if="userStore.userRoleLevel < row.roleLevel"
+          icon="vxe-icon-delete"
+          mode="text"
+          permission-code="userManageActionDelete"
+          status="error"
+          @click="removeRow(row)"
+        ></vxe-button>
+      </template>
+    </vxe-grid>
+  </PageView>
+</template>
